@@ -1,0 +1,28 @@
+{
+	"intervalmin": {
+		"name": "interval",
+		"options": ["1min", "5min", "15min", "30min", "60min"],
+		"tooltip" : "Time interval between two consecutive data points in the time series"
+	},
+	"outputsize": {
+		"name": "outputsize",
+		"options": ["compact", "full"],
+		"tooltip" : "VAUVAU"
+	},
+	"interval": {
+		"name": "interval",
+		"options": ["1min", "5min", "15min", "30min", "60min", "daily", "weekly", "monthly"],
+		"tooltip" : "BLABLA"
+	},
+	"time_period": {
+		"name": "time_period",
+		"options": ["5", "15", "30", "60", "100", "200", "500", "1000"],
+		"tooltip" : "BLABLA"
+	},
+	"series_type": {
+		"name": "series_type",
+		"options": ["close", "open", "high", "low"],
+		"tooltip" : "BLABLA"
+	}
+
+}

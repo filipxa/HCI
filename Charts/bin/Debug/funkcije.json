@@ -1,0 +1,54 @@
+{
+	"Interday": {
+		"function": "TIME_SERIES_INTRADAY",
+		"RequiredPara": ["symbol", "intervalmin"],
+		"OptionalPara": ["outputsize"],
+		"isOHLC" : true
+
+	},
+	"Daily": {
+		"function": "TIME_SERIES_DAILY",
+		"RequiredPara": ["symbol", "interval"],
+		"OptionalPara": ["outputsize"]
+		
+
+	},
+	"Daily adjusted": {
+		"function": "TIME_SERIES_DAILY_ADJUSTED",
+		"RequiredPara": ["symbol", "interval"],
+		"OptionalPara": ["outputsize"]
+
+	},
+	"Crypto interday": {
+		"function": "DIGITAL_CURRENCY_INTRADAY",
+		"RequiredPara": ["symbolCrypto", "market"],
+		"OptionalPara": []
+
+	},
+	"Crypto daily": {
+		"function": "DIGITAL_CURRENCY_DAILY",
+		"RequiredPara": ["symbolCrypto", "market"],
+		"OptionalPara": []
+
+	},
+	"Crypto weekly": {
+		"function": "DIGITAL_CURRENCY_WEEKLY",
+		"RequiredPara": ["symbolCrypto", "market"],
+		"OptionalPara": []
+
+	},
+	"Crypto monthly": {
+		"function": "DIGITAL_CURRENCY_MONTHLY",
+		"RequiredPara": ["symbolCrypto", "market"],
+		"OptionalPara": []
+
+	},
+	"SMA": {
+		"function": "SMA",
+		"RequiredPara": ["symbol", "interval", "time_period", "series_type"],
+		"OptionalPara": []
+
+	}
+
+
+}
