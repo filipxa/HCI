@@ -111,12 +111,19 @@ namespace Charts
 
         public string excuteCommand(Dictionary<string,string> parameters) 
         {
+            bool isFirst = true;
             string url = "https://www.alphavantage.co/query?";
             foreach (KeyValuePair<string, string> entry in parameters)
             {
-                url += "&" + entry.Key + "=" + entry.Value;
+                if (isFirst)
+                    isFirst = false;
+                else
+                    url += "&";
+
+                url += entry.Key + "=" + entry.Value;
             }
             url+= apiKey;
+
             string json = "";
             using (WebClient client = new WebClient())
             {

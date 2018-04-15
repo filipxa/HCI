@@ -69,6 +69,7 @@
     <Compile Include="Chart.Designer.cs">
       <DependentUpon>Chart.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataHandler.cs" />
     <Compile Include="FunctionAddDialog.cs">
       <SubType>Form</SubType>
     </Compile>

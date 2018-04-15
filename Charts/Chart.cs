@@ -25,7 +25,7 @@ namespace Charts
             
         }
 
-        private string dateTimeFormat = "mm:ss";
+        private string dateTimeFormat = "yyyy-MM-dd HH:mm";
 
         private static Dictionary<string, Thread> idFunctionThread = new Dictionary<string, Thread>();
         private static Dictionary<string, Series> idSeries = new Dictionary<string, Series>();
@@ -165,6 +165,7 @@ namespace Charts
         private List<PointModel> getNewNodes(string json, ref string lastRefresh, bool isOhlc)
         {
             //OVDE TREBA ISPARSIRATI
+            List<PointModel> pointssss = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
             List<PointModel> points = new List<PointModel>();
            Random r = new Random();
             double k,s;
@@ -183,7 +184,7 @@ namespace Charts
                     points.Add(p);
                 }
             }
-            return points;
+            return pointssss;
 
         }
 

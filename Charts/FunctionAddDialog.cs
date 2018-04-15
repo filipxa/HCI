@@ -181,12 +181,10 @@ namespace Charts
         }
         public bool isSeriesOhlc()
         {
-            if (f.isOHLC)
-            {
-                return true;
-            }
-            return false;
+
+            return f.isOHLC;
         }
+
 
         public string getSeriesDisplayName()
         {
