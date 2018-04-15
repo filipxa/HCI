@@ -46,7 +46,6 @@
             // 
             // comboBoxFun
             // 
-            this.comboBoxFun.BackColor = System.Drawing.Color.Lavender;
             this.comboBoxFun.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFun.FormattingEnabled = true;
             this.comboBoxFun.Location = new System.Drawing.Point(12, 35);
@@ -58,20 +57,14 @@
             // labelFun
             // 
             this.labelFun.AutoSize = true;
-            this.labelFun.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.labelFun.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.labelFun.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFun.ForeColor = System.Drawing.Color.Goldenrod;
-            this.labelFun.Location = new System.Drawing.Point(12, 12);
+            this.labelFun.Location = new System.Drawing.Point(12, 19);
             this.labelFun.Name = "labelFun";
-            this.labelFun.Size = new System.Drawing.Size(81, 22);
+            this.labelFun.Size = new System.Drawing.Size(48, 13);
             this.labelFun.TabIndex = 2;
             this.labelFun.Text = "Function";
-            this.labelFun.Click += new System.EventHandler(this.labelFun_Click);
             // 
             // listBoxSym
             // 
-            this.listBoxSym.BackColor = System.Drawing.Color.Lavender;
             this.listBoxSym.FormattingEnabled = true;
             this.listBoxSym.Location = new System.Drawing.Point(171, 62);
             this.listBoxSym.Name = "listBoxSym";
@@ -80,7 +73,6 @@
             // 
             // tbSym
             // 
-            this.tbSym.BackColor = System.Drawing.Color.Lavender;
             this.tbSym.Location = new System.Drawing.Point(172, 35);
             this.tbSym.Name = "tbSym";
             this.tbSym.Size = new System.Drawing.Size(266, 20);
@@ -90,18 +82,14 @@
             // labelSym1
             // 
             this.labelSym1.AutoSize = true;
-            this.labelSym1.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.labelSym1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelSym1.ForeColor = System.Drawing.Color.Goldenrod;
-            this.labelSym1.Location = new System.Drawing.Point(168, 12);
+            this.labelSym1.Location = new System.Drawing.Point(169, 19);
             this.labelSym1.Name = "labelSym1";
-            this.labelSym1.Size = new System.Drawing.Size(67, 20);
+            this.labelSym1.Size = new System.Drawing.Size(41, 13);
             this.labelSym1.TabIndex = 5;
             this.labelSym1.Text = "Symbol";
             // 
             // listBoxMarket
             // 
-            this.listBoxMarket.BackColor = System.Drawing.Color.Lavender;
             this.listBoxMarket.FormattingEnabled = true;
             this.listBoxMarket.Location = new System.Drawing.Point(444, 62);
             this.listBoxMarket.Name = "listBoxMarket";
@@ -110,7 +98,6 @@
             // 
             // tbMarket
             // 
-            this.tbMarket.BackColor = System.Drawing.Color.Lavender;
             this.tbMarket.Location = new System.Drawing.Point(444, 36);
             this.tbMarket.Name = "tbMarket";
             this.tbMarket.Size = new System.Drawing.Size(266, 20);
@@ -120,31 +107,23 @@
             // labelMarket
             // 
             this.labelMarket.AutoSize = true;
-            this.labelMarket.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.labelMarket.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelMarket.ForeColor = System.Drawing.Color.Goldenrod;
-            this.labelMarket.Location = new System.Drawing.Point(464, 14);
+            this.labelMarket.Location = new System.Drawing.Point(441, 19);
             this.labelMarket.Name = "labelMarket";
-            this.labelMarket.Size = new System.Drawing.Size(64, 20);
+            this.labelMarket.Size = new System.Drawing.Size(40, 13);
             this.labelMarket.TabIndex = 5;
             this.labelMarket.Text = "Market";
             // 
             // groupBoxReq
             // 
-            this.groupBoxReq.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.groupBoxReq.ForeColor = System.Drawing.Color.Goldenrod;
             this.groupBoxReq.Location = new System.Drawing.Point(12, 62);
             this.groupBoxReq.Name = "groupBoxReq";
             this.groupBoxReq.Size = new System.Drawing.Size(149, 199);
             this.groupBoxReq.TabIndex = 6;
             this.groupBoxReq.TabStop = false;
             this.groupBoxReq.Text = "Required Parameters";
-            this.groupBoxReq.Enter += new System.EventHandler(this.groupBoxReq_Enter);
             // 
             // groupBoxOptional
             // 
-            this.groupBoxOptional.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.groupBoxOptional.ForeColor = System.Drawing.Color.Goldenrod;
             this.groupBoxOptional.Location = new System.Drawing.Point(12, 270);
             this.groupBoxOptional.Name = "groupBoxOptional";
             this.groupBoxOptional.Size = new System.Drawing.Size(149, 199);
@@ -175,7 +154,6 @@
             // 
             // comboBoxInterval
             // 
-            this.comboBoxInterval.BackColor = System.Drawing.Color.Lavender;
             this.comboBoxInterval.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterval.FormattingEnabled = true;
             this.comboBoxInterval.Location = new System.Drawing.Point(12, 499);
@@ -187,7 +165,6 @@
             // labelInterval
             // 
             this.labelInterval.AutoSize = true;
-            this.labelInterval.ForeColor = System.Drawing.Color.Goldenrod;
             this.labelInterval.Location = new System.Drawing.Point(12, 483);
             this.labelInterval.Name = "labelInterval";
             this.labelInterval.Size = new System.Drawing.Size(42, 13);
@@ -198,7 +175,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DarkSlateGray;
             this.ClientSize = new System.Drawing.Size(727, 714);
             this.Controls.Add(this.BtDone);
             this.Controls.Add(this.button1);
