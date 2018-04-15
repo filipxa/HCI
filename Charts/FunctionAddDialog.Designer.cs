@@ -134,7 +134,7 @@
             this.groupBoxReq.TabIndex = 6;
             this.groupBoxReq.TabStop = false;
             this.groupBoxReq.Text = "Required Parameters";
-            this.groupBoxReq.Enter += new System.EventHandler(this.groupBoxReq_Enter);
+            //this.groupBoxReq.Enter += new System.EventHandler(this.groupBoxReq_Enter);
             // 
             // groupBoxOptional
             // 
@@ -146,7 +146,7 @@
             this.groupBoxOptional.TabIndex = 6;
             this.groupBoxOptional.TabStop = false;
             this.groupBoxOptional.Text = "Optional Parameters";
-            this.groupBoxOptional.Enter += new System.EventHandler(this.groupBoxOptional_Enter);
+            //this.groupBoxOptional.Enter += new System.EventHandler(this.groupBoxOptional_Enter);
             // 
             // button1
             // 
