@@ -127,12 +127,10 @@
             this.Controls.Add(this.groupBoxGraphControl);
             this.Controls.Add(this.cartesianChart1);
             this.Name = "Chart";
-<<<<<<< HEAD
+
             this.Text = "Charts";
-=======
-            this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Chart_FormClosed);
->>>>>>> master
+
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxGraphControl.ResumeLayout(false);
             this.groupBoxGraphControl.PerformLayout();
