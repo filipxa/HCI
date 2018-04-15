@@ -218,5 +218,11 @@ namespace Charts
             //id will hold whole link as that should be unique per instance
             public string id;
         }
+
+        private void Chart_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            idFunctionThread.Clear();
+            idSeries.Clear();
+        }
     }
 }

@@ -17,17 +17,17 @@ namespace Charts
         Function f;
         List<string> symbols = new List<string>();
         List<string> market = new List<string>();
-        int y=0;
-        int x=0;
+        int y = 0;
+        int x = 0;
         public FunctionAddDialog()
         {
             InitializeComponent();
             CommandManager.load();
             foreach (string fun in CommandManager.getAvailableFunctions())
                 this.comboBoxFun.Items.Add(fun);
-            for (int i=0; i<12; i++)
+            for (int i = 0; i < 12; i++)
             {
-                comboBoxInterval.Items.Add((i*5).ToString()+"sec");
+                comboBoxInterval.Items.Add((i * 5).ToString() + "sec");
             }
             comboBoxInterval.SelectedIndex = 1;
             comboBoxFun.SelectedIndex = 0;
@@ -42,9 +42,9 @@ namespace Charts
             x = 3;
             y = 20;
             groupBoxReq.Controls.Clear();
-            foreach(string reqPara in f.RequiredPara)
+            foreach (string reqPara in f.RequiredPara)
             {
-                initParameterComponent(reqPara, groupBoxReq);   
+                initParameterComponent(reqPara, groupBoxReq);
             }
             x = 3;
             y = 20;
@@ -57,7 +57,7 @@ namespace Charts
 
         private void initParameterComponent(string reqPara, GroupBox groupBox)
         {
-            
+
             if (reqPara.ToLower().Contains("symbol") || reqPara.ToLower().Contains("market"))
             {
                 addSymbolTable(reqPara);
@@ -66,14 +66,14 @@ namespace Charts
 
             Parameter par = CommandManager.getParameter(reqPara);
 
-         
+
             Label labelName = new Label();
             labelName.Height = 17;
             labelName.Text = par.name;
 
             groupBox.Controls.Add(labelName);
 
-            labelName.Location = new Point(x,y);
+            labelName.Location = new Point(x, y);
 
             y += labelName.Height;
 
@@ -82,7 +82,7 @@ namespace Charts
             ToolTip tp = new ToolTip();
 
             tp.SetToolTip(cb, par.tooltip); // ovo zameniti sa parametar tootlip
-            
+
             foreach (string parameter in par.options)
             {
                 cb.Items.Add(parameter);
@@ -103,16 +103,17 @@ namespace Charts
 
         private void addSymbolTable(string reqPara)
         {
-            List<Tuple<string,string>> values;
+            List<Tuple<string, string>> values;
             ListBox lb = listBoxSym;
             TextBox tb = tbSym;
             List<string> names = symbols;
-            
+
             if (reqPara.ToLower().Contains("crypto"))
             {
                 values = CommandManager.getCryptos();
-                
-            } else if (reqPara.ToLower().Contains("market"))
+
+            }
+            else if (reqPara.ToLower().Contains("market"))
             {
                 values = CommandManager.getCurrency();
                 lb = listBoxMarket;
@@ -120,7 +121,8 @@ namespace Charts
                 names = market;
                 tbMarket.Enabled = true;
                 listBoxMarket.Enabled = true;
-            } else
+            }
+            else
             {
                 tbMarket.Enabled = false;
                 listBoxMarket.Enabled = false;
@@ -129,11 +131,11 @@ namespace Charts
             names.Clear();
             foreach (Tuple<string, string> pair in values)
             {
-          
+
                 names.Add(pair.Item1 + ", " + pair.Item2);
-                
+
             }
-            
+
             lb.BeginUpdate();
             lb.DataSource = names;
             lb.EndUpdate();
@@ -149,14 +151,14 @@ namespace Charts
 
         private void comboBoxFun_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if((string)comboBoxFun.SelectedItem!=null)
-                 updateFunction((string)comboBoxFun.SelectedItem);
+            if ((string)comboBoxFun.SelectedItem != null)
+                updateFunction((string)comboBoxFun.SelectedItem);
         }
 
         private void tbSym_TextChanged(object sender, EventArgs e)
         {
             listBoxSym.BeginUpdate();
-            var names =  symbols.Where(item => item.ToLower().Contains(tbSym.Text.ToLower())).ToList();
+            var names = symbols.Where(item => item.ToLower().Contains(tbSym.Text.ToLower())).ToList();
             listBoxSym.DataSource = names;
             listBoxSym.EndUpdate();
 
@@ -173,11 +175,11 @@ namespace Charts
         private void btDone_Click(object sender, EventArgs e)
         {
             if (!validateForms())
-            { 
+            {
                 this.DialogResult = DialogResult.None;
                 return;
-            } 
- 
+            }
+
         }
         public bool isSeriesOhlc()
         {
@@ -189,12 +191,14 @@ namespace Charts
         public string getSeriesDisplayName()
         {
             //OVO TREBA DODATI
+
+
             return tbSym.Text;
         }
 
         public int getInterval()
         {
-           return Convert.ToInt32(comboBoxInterval.SelectedItem.ToString().Replace("sec", ""));
+            return Convert.ToInt32(comboBoxInterval.SelectedItem.ToString().Replace("sec", ""));
         }
 
         public Dictionary<string, string> generateCommand()
@@ -207,11 +211,11 @@ namespace Charts
             {
                 command.Add("market", tbMarket.Text);
             }
-            
-            foreach(var item  in groupBoxReq.Controls)
+
+            foreach (var item in groupBoxReq.Controls)
             {
                 ComboBox cb = item as ComboBox;
-                if(cb!=null)
+                if (cb != null)
                     command.Add(cb.Name, cb.SelectedItem.ToString());
             }
             foreach (var item in groupBoxOptional.Controls)
@@ -227,12 +231,44 @@ namespace Charts
         Regex regex = new Regex(@"[A-Z0-9]{1,4}");
         private bool validateForms()
         {
-            
-
-            labelSym1.ForeColor = regex.Match(tbSym.Text).Success  ? Color.Black : Color.Red;
-            labelMarket.ForeColor = (!tbMarket.Enabled || regex.Match(tbMarket.Text).Success) ? Color.Black : Color.Red;
+            if (!isSymChoosen())
+            {
+                return false;
+            }
+            if (tbMarket.Enabled)
+            {
+                if (!isMarketChoosen())
+                {
+                    return false;
+                }
+            }
 
             return regex.Match(tbSym.Text).Success && (!tbMarket.Enabled || regex.Match(tbMarket.Text).Success);
+        }
+
+        private bool isMarketChoosen()
+        {
+            if (!regex.Match(tbMarket.Text).Success)
+            {
+                labelMarket.ForeColor = Color.Red;
+                MessageBox.Show("You have to choose one item from list.");
+                labelMarket.ForeColor = Color.Black;
+                return false;
+            }
+            return true;
+        }
+
+        private bool isSymChoosen()
+        {
+            if (!regex.Match(tbSym.Text).Success)
+            {
+                labelSym1.ForeColor = Color.Red;
+                MessageBox.Show("You have to choose one item from list.");
+                labelSym1.ForeColor = Color.Black;
+                return false;
+            }
+            return true;
+
         }
     }
 }
