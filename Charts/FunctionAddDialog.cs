@@ -236,5 +236,15 @@ namespace Charts
 
             return regex.Match(tbSym.Text).Success && (!tbMarket.Enabled || regex.Match(tbMarket.Text).Success);
         }
+
+        private void groupBoxOptional_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBoxReq_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -46,18 +46,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChart1.Location = new System.Drawing.Point(12, 12);
             this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(1137, 507);
+            this.cartesianChart1.Size = new System.Drawing.Size(860, 255);
             this.cartesianChart1.TabIndex = 0;
             this.cartesianChart1.Text = "cartesianChart1";
             // 
             // btOdabirGrafa
             // 
+            this.btOdabirGrafa.BackColor = System.Drawing.Color.Goldenrod;
+            this.btOdabirGrafa.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btOdabirGrafa.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btOdabirGrafa.Location = new System.Drawing.Point(6, 19);
             this.btOdabirGrafa.Name = "btOdabirGrafa";
-            this.btOdabirGrafa.Size = new System.Drawing.Size(213, 23);
+            this.btOdabirGrafa.Size = new System.Drawing.Size(213, 39);
             this.btOdabirGrafa.TabIndex = 2;
             this.btOdabirGrafa.Text = "Ucitaj graf";
-            this.btOdabirGrafa.UseVisualStyleBackColor = true;
+            this.btOdabirGrafa.UseVisualStyleBackColor = false;
             this.btOdabirGrafa.Click += new System.EventHandler(this.btOdabirGrafa_Click);
             // 
             // groupBoxGraphControl
@@ -66,7 +69,8 @@
             this.groupBoxGraphControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxGraphControl.Controls.Add(this.labelLastUpdated);
             this.groupBoxGraphControl.Controls.Add(this.btOdabirGrafa);
-            this.groupBoxGraphControl.Location = new System.Drawing.Point(12, 525);
+            this.groupBoxGraphControl.ForeColor = System.Drawing.Color.Lavender;
+            this.groupBoxGraphControl.Location = new System.Drawing.Point(12, 273);
             this.groupBoxGraphControl.Name = "groupBoxGraphControl";
             this.groupBoxGraphControl.Size = new System.Drawing.Size(225, 176);
             this.groupBoxGraphControl.TabIndex = 3;
@@ -76,7 +80,7 @@
             // labelLastUpdated
             // 
             this.labelLastUpdated.AutoSize = true;
-            this.labelLastUpdated.Location = new System.Drawing.Point(6, 45);
+            this.labelLastUpdated.Location = new System.Drawing.Point(6, 61);
             this.labelLastUpdated.Name = "labelLastUpdated";
             this.labelLastUpdated.Size = new System.Drawing.Size(184, 13);
             this.labelLastUpdated.TabIndex = 3;
@@ -87,7 +91,7 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(243, 525);
+            this.tabControl1.Location = new System.Drawing.Point(243, 273);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(418, 176);
@@ -95,34 +99,35 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.BackColor = System.Drawing.Color.DarkSlateGray;
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(410, 150);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
+            this.tabPage2.BackColor = System.Drawing.Color.DarkSlateGray;
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(410, 150);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Chart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1161, 713);
+            this.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.ClientSize = new System.Drawing.Size(884, 461);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBoxGraphControl);
             this.Controls.Add(this.cartesianChart1);
             this.Name = "Chart";
-            this.Text = "Form1";
+            this.Text = "Charts";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxGraphControl.ResumeLayout(false);
             this.groupBoxGraphControl.PerformLayout();
