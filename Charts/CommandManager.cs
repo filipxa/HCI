@@ -149,6 +149,7 @@ namespace Charts
         public class Parameter
         {
             public string name { get; set; }
+            public string displayName { get; set; }
             public string tooltip { get; set; }
             public List<string> options { get; set; }
         }

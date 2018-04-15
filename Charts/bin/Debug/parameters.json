@@ -1,28 +1,34 @@
 {
 	"intervalmin": {
 		"name": "interval",
+		"displayName" : "wow",
 		"options": ["1min", "5min", "15min", "30min", "60min"],
 		"tooltip" : "Time interval between two consecutive data points in the time series"
 	},
 	"outputsize": {
 		"name": "outputsize",
+		"displayName" : "wow",
 		"options": ["compact", "full"],
-		"tooltip" : "VAUVAU"
+		"tooltip" : "By default, outputsize=compact. Compact returns only the latest 100 data points in the intraday time series. Full returns the full-length intraday time series. "
+		
 	},
 	"interval": {
 		"name": "interval",
+		"displayName" : "wow",
 		"options": ["1min", "5min", "15min", "30min", "60min", "daily", "weekly", "monthly"],
-		"tooltip" : "BLABLA"
+		"tooltip" : "Time interval between two consecutive data points in the time series."
 	},
 	"time_period": {
 		"name": "time_period",
+		"displayName" : "wow",
 		"options": ["5", "15", "30", "60", "100", "200", "500", "1000"],
 		"tooltip" : "BLABLA"
 	},
 	"series_type": {
 		"name": "series_type",
+		"displayName" : "wow",
 		"options": ["close", "open", "high", "low"],
-		"tooltip" : "BLABLA"
+		"tooltip" : "The desired price type in the time series."
 	}
 
 }
