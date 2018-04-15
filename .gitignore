@@ -1,0 +1,16 @@
+
+\.vs/
+
+Charts/obj/Debug/DesignTimeResolveAssemblyReferencesInput\.cache
+
+Charts/obj/Debug/Charts\.pdb
+
+Charts/obj/Debug/Charts\.csproj\.CoreCompileInputs\.cache
+
+Charts/bin/Debug/Charts\.pdb
+
+Charts/obj/
+
+Charts/Charts\.csproj
+
+Charts/bin/Debug/Charts\.exe
