@@ -181,7 +181,10 @@ namespace Charts
         }
         public bool isSeriesOhlc()
         {
-            //OVO TREBA DODATI
+            if (f.isOHLC)
+            {
+                return true;
+            }
             return false;
         }
 

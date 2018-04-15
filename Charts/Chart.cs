@@ -217,5 +217,10 @@ namespace Charts
             //id will hold whole link as that should be unique per instance
             public string id;
         }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

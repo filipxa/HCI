@@ -144,6 +144,7 @@ namespace Charts
             public string function { get; set; }
             public List<string> RequiredPara { get; set; }
             public List<string> OptionalPara { get; set; }
+            public bool isOHLC { get; set; }
         }
         public class Parameter
         {
