@@ -9,44 +9,51 @@
 	"Daily": {
 		"function": "TIME_SERIES_DAILY",
 		"RequiredPara": ["symbol", "interval"],
-		"OptionalPara": ["outputsize"]
+		"OptionalPara": ["outputsize"],
+		"isOHLC" : true
 		
 
 	},
 	"Daily adjusted": {
 		"function": "TIME_SERIES_DAILY_ADJUSTED",
 		"RequiredPara": ["symbol", "interval"],
-		"OptionalPara": ["outputsize"]
+		"OptionalPara": ["outputsize"],
+		"isOHLC" : true
 
 	},
 	"Crypto interday": {
 		"function": "DIGITAL_CURRENCY_INTRADAY",
 		"RequiredPara": ["symbolCrypto", "market"],
-		"OptionalPara": []
+		"OptionalPara": [],
+		"isOHLC" : true
 
 	},
 	"Crypto daily": {
 		"function": "DIGITAL_CURRENCY_DAILY",
 		"RequiredPara": ["symbolCrypto", "market"],
-		"OptionalPara": []
+		"OptionalPara": [],
+		"isOHLC" : true
 
 	},
 	"Crypto weekly": {
 		"function": "DIGITAL_CURRENCY_WEEKLY",
 		"RequiredPara": ["symbolCrypto", "market"],
-		"OptionalPara": []
+		"OptionalPara": [],
+		"isOHLC" : true
 
 	},
 	"Crypto monthly": {
 		"function": "DIGITAL_CURRENCY_MONTHLY",
 		"RequiredPara": ["symbolCrypto", "market"],
-		"OptionalPara": []
+		"OptionalPara": [],
+		"isOHLC" : true
 
 	},
 	"SMA": {
 		"function": "SMA",
 		"RequiredPara": ["symbol", "interval", "time_period", "series_type"],
-		"OptionalPara": []
+		"OptionalPara": [],
+		"isOHLC" : false
 
 	}
 
