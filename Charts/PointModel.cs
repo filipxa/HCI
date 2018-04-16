@@ -20,7 +20,7 @@ namespace Charts
     }
     class OHLCPointModel : PointModel
     {
-        public OHLCPointModel() { }
+
         public OHLCPointModel(double open, double high, double low, double close, DateTime time)
         {
             Open = open;

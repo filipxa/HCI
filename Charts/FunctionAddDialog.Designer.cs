@@ -74,6 +74,11 @@
             this.listBoxSym.Name = "listBoxSym";
             this.listBoxSym.Size = new System.Drawing.Size(267, 407);
             this.listBoxSym.TabIndex = 3;
+            this.listBoxSym.DoubleClick += new System.EventHandler(this.listBoxSym_DoubleClick);
+            this.listBoxSym.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxSym_KeyDown);
+            this.listBoxSym.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listBoxSym_KeyPress);
+            this.listBoxSym.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listBoxSym_KeyUp);
+            this.listBoxSym.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxSym_MouseDoubleClick);
             // 
             // tbSym
             // 
@@ -83,6 +88,9 @@
             this.tbSym.Size = new System.Drawing.Size(266, 20);
             this.tbSym.TabIndex = 4;
             this.tbSym.TextChanged += new System.EventHandler(this.tbSym_TextChanged);
+            this.tbSym.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSym_KeyDown);
+            this.tbSym.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSym_KeyPress);
+            this.tbSym.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbSym_KeyUp);
             // 
             // labelSym1
             // 
@@ -103,6 +111,9 @@
             this.listBoxMarket.Name = "listBoxMarket";
             this.listBoxMarket.Size = new System.Drawing.Size(267, 407);
             this.listBoxMarket.TabIndex = 3;
+            this.listBoxMarket.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxMarket_KeyDown);
+            this.listBoxMarket.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listBoxMarket_KeyPress);
+            this.listBoxMarket.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxMarket_MouseDoubleClick);
             // 
             // tbMarket
             // 
@@ -112,6 +123,9 @@
             this.tbMarket.Size = new System.Drawing.Size(266, 20);
             this.tbMarket.TabIndex = 4;
             this.tbMarket.TextChanged += new System.EventHandler(this.tbMarket_TextChanged);
+            this.tbMarket.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbMarket_KeyDown);
+            this.tbMarket.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbMarket_KeyPress);
+            this.tbMarket.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbMarket_KeyUp);
             // 
             // labelMarket
             // 
@@ -134,7 +148,6 @@
             this.groupBoxReq.TabIndex = 6;
             this.groupBoxReq.TabStop = false;
             this.groupBoxReq.Text = "Required Parameters";
-            //this.groupBoxReq.Enter += new System.EventHandler(this.groupBoxReq_Enter);
             // 
             // groupBoxOptional
             // 
@@ -146,7 +159,6 @@
             this.groupBoxOptional.TabIndex = 6;
             this.groupBoxOptional.TabStop = false;
             this.groupBoxOptional.Text = "Optional Parameters";
-            //this.groupBoxOptional.Enter += new System.EventHandler(this.groupBoxOptional_Enter);
             // 
             // button1
             // 
