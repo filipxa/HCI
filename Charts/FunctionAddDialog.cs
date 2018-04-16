@@ -23,6 +23,8 @@ namespace Charts
         {
             InitializeComponent();
             CommandManager.load();
+            listBoxSym.SelectionMode = SelectionMode.One;
+            
             foreach (string fun in CommandManager.getAvailableFunctions())
                 this.comboBoxFun.Items.Add(fun);
             for (int i = 0; i < 12; i++)
@@ -161,6 +163,7 @@ namespace Charts
             var names = symbols.Where(item => item.ToLower().Contains(tbSym.Text.ToLower())).ToList();
             listBoxSym.DataSource = names;
             listBoxSym.EndUpdate();
+            labelSym1.ForeColor = isSymChoosen() ? Color.Black : Color.Red; // NADJI BOJU
 
         }
 
@@ -177,6 +180,7 @@ namespace Charts
             if (!validateForms())
             {
                 this.DialogResult = DialogResult.None;
+                MessageBox.Show("Symbol and market field can only contain alphanumerical values, 1-4 characters long.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return;
             }
 
@@ -228,47 +232,293 @@ namespace Charts
             return command;
         }
 
-        Regex regex = new Regex(@"[A-Z0-9]{1,4}");
+        Regex regex = new Regex("^[A-Z0-9]{1,4}$");
         private bool validateForms()
         {
+            bool allGood = true;
+            List<String> chosen = new List<string>();
             if (!isSymChoosen())
             {
-                return false;
+                allGood = false;
+                chosen.Add( "symbol");
+                
             }
-            if (tbMarket.Enabled)
+            if(!isMarketChoosen())
             {
-                if (!isMarketChoosen())
-                {
-                    return false;
-                }
+                allGood = false;
+                chosen.Add("market");
             }
 
-            return regex.Match(tbSym.Text).Success && (!tbMarket.Enabled || regex.Match(tbMarket.Text).Success);
+            if (!allGood)
+            {
+                string msg = "You have to chose: ";
+                
+                foreach (string text in chosen)
+                {
+                    msg += text + " ";
+                }
+
+              
+            } 
+            return isSymChoosen() && isMarketChoosen();
+
+
+
         }
 
         private bool isMarketChoosen()
         {
-            if (!regex.Match(tbMarket.Text).Success)
-            {
-                labelMarket.ForeColor = Color.Red;
-                MessageBox.Show("You have to choose one item from list.");
-                labelMarket.ForeColor = Color.Black;
-                return false;
-            }
-            return true;
+            bool jbm = regex.IsMatch(tbMarket.Text); 
+
+            return !tbMarket.Enabled || regex.IsMatch(tbMarket.Text);
         }
 
         private bool isSymChoosen()
         {
-            if (!regex.Match(tbSym.Text).Success)
-            {
-                labelSym1.ForeColor = Color.Red;
-                MessageBox.Show("You have to choose one item from list.");
-                labelSym1.ForeColor = Color.Black;
-                return false;
-            }
-            return true;
+            
+            return regex.IsMatch(tbSym.Text);
 
         }
+
+
+        // keys for listBoxSym and tb_sym
+
+        private void listBoxSym_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.tbSym.SelectionStart = tbSym.Text.Length;
+        }
+        private void listBoxSym_KeyDown(object sender, KeyEventArgs e)
+        {
+            this.tbSym.SelectionStart = tbSym.Text.Length;
+        }
+
+        private void listBoxSym_DoubleClick(object sender, EventArgs e)
+        {
+            int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
+            this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
+        }
+
+        private void listBoxSym_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
+            this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
+        }
+
+        private void tbSym_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                Regex regex1 = new Regex("[ \t]");
+                if (this.tbSym.Text.Equals(regex1) || this.tbSym.Text.Equals(""))
+                {
+                    if (this.listBoxSym.SelectedItem != null)
+                    {
+                        string text = listBoxSym.SelectedItem.ToString();
+
+                        this.tbSym.Text = text.Substring(0, text.IndexOf(','));
+                    }
+                }
+               
+
+
+
+
+            }
+        }
+        private void listBoxSym_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                bool found = false;
+                Regex regex1 = new Regex("[ \t]");
+                if (this.tbSym.Text.Equals(regex1) || this.tbSym.Text.Equals(""))
+                {
+                    if (this.listBoxSym.SelectedItem != null)
+                    {
+                        int j = this.listBoxSym.SelectedItem.ToString().IndexOf(',');
+                        this.tbSym.Text = this.listBoxSym.SelectedItem.ToString().Substring(0, j);
+                        found = true;
+                    }
+                }
+                foreach (string name in this.listBoxSym.Items)
+                {
+                    if (this.tbSym.Text.Equals(name.Substring(0, name.IndexOf(','))))
+                    {
+                        found = true;
+                        int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
+                        this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
+                        break;
+                    }
+                }
+
+
+
+
+            }
+        }
+
+        private void tbSym_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down)
+            {
+                if (this.listBoxSym.SelectedIndex >= this.listBoxSym.Items.Count - 1)
+                {
+                    this.listBoxSym.SelectedIndex = this.listBoxSym.Items.Count - 1;
+                }
+                else
+                {
+                    this.listBoxSym.SelectedIndex++;
+                }
+
+            }
+            this.tbSym.SelectionStart = tbSym.Text.Length;
+        }
+
+        private void tbSym_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                this.tbSym.SelectionStart = tbSym.Text.Length;
+                if (this.listBoxSym.SelectedIndex <= 0)
+                {
+                    this.listBoxSym.SelectedIndex = 0;
+                }
+                else
+                {
+                    this.listBoxSym.SelectedIndex--;
+                }
+            }
+
+           
+
+        }
+
+
+
+
+        // keys for listBoxMarket and tbMarket
+        private void tbMarket_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down)
+            {
+                this.tbMarket.SelectionStart = tbMarket.Text.Length;
+
+
+                if (this.listBoxMarket.SelectedIndex >= this.listBoxMarket.Items.Count - 1)
+                {
+                    this.listBoxMarket.SelectedIndex = this.listBoxMarket.Items.Count - 1;
+                }
+                else
+                {
+                    this.listBoxMarket.SelectedIndex++;
+                }
+            }
+        }
+
+        private void tbMarket_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                this.tbMarket.SelectionStart = tbMarket.Text.Length;
+                {
+                    if (this.listBoxMarket.SelectedIndex <= 0)
+                    {
+                        this.listBoxMarket.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        this.listBoxMarket.SelectedIndex--;
+                    }
+                }
+            }
+
+        }
+
+        
+
+        private void listBoxMarket_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void listBoxMarket_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                bool found = false;
+                Regex regex1 = new Regex("[ \t]");
+                if (this.tbMarket.Text.Equals(regex1) || this.tbMarket.Text.Equals(""))
+                {
+                    if (this.listBoxMarket.SelectedItem != null)
+                    {
+                        int j = this.listBoxMarket.SelectedItem.ToString().IndexOf(',');
+                        this.tbMarket.Text = this.listBoxMarket.SelectedItem.ToString().Substring(0, j);
+                        found = true;
+                    }
+                }
+                foreach (string name in this.listBoxMarket.Items)
+                {
+                    if (this.tbMarket.Text.Equals(name.Substring(0, name.IndexOf(','))))
+                    {
+                        found = true;
+                        int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
+                        this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    labelMarket.ForeColor = Color.Red;
+                    MessageBox.Show("Only offered values can be choosen.");
+                    labelMarket.ForeColor = Color.Black;
+                    return;
+                }
+                
+            }
+        }
+
+        private void listBoxMarket_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
+            this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+        }
+
+        private void tbMarket_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                bool found = false;
+                Regex regex1 = new Regex("[ \t]");
+                if (this.tbMarket.Text.Equals(regex1) || this.tbMarket.Text.Equals(""))
+                {
+                    if (this.listBoxMarket.SelectedItem != null)
+                    {
+                        this.tbMarket.Text = this.listBoxMarket.SelectedItem.ToString();
+                        found = true;
+                    }
+                }
+                foreach (string name in this.listBoxMarket.Items)
+                {
+                    if (this.tbMarket.Text.Equals(name.Substring(0, name.IndexOf(','))))
+                    {
+                        found = true;
+                        int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
+                        this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    labelMarket.ForeColor = Color.Red;
+                    MessageBox.Show("Only offered values can be choosen.");
+                    labelMarket.ForeColor = Color.Black;
+                    return;
+                }
+            }
+        }
+
+       
     }
-}
+ }
