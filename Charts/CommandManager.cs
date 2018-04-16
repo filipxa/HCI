@@ -125,8 +125,10 @@ namespace Charts
             url+= apiKey;
 
             string json = "";
-            using (WebClient client = new WebClient())//ogradti i poruku za tab o gresci poslenji updejt cekanje na ucatavenj
+
+            using (WebClient client = new WebClient())
             {
+                Console.WriteLine("Starting download");
                 try
                 {
                     json = client.DownloadString(url);
@@ -134,9 +136,10 @@ namespace Charts
                 catch (Exception)
                 {
 
-                    Console.WriteLine("url skace");
+                    Console.WriteLine("Failed ");
                 }
-                 
+              
+                Console.WriteLine("Download done");
             }
             if (isJsonCorrect(json))
             {

@@ -12,6 +12,7 @@ using LiveCharts.Wpf; //The WPF controls
 using LiveCharts.WinForms;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
+using LiveCharts.Geared;
 using System.Threading;
 
 namespace Charts
@@ -48,11 +49,15 @@ namespace Charts
             else
             { 
                 series = new LineSeries();
-                series.Values = new ChartValues<ValuePointModel>();
+                
+                series.Values = new GearedValues<ValuePointModel>();
+                ((GearedValues<ValuePointModel>)series.Values).Quality = Quality.Medium;
+
             }
             
-          //  series.PointGeometry = null;// ovo je za preformanse ne radi ohlc sa puno tacka
-            series.DataLabels = true;
+
+            //series.PointGeometry = null;// ovo je za preformanse ne radi ohlc sa puno tacka
+            //series.DataLabels = true;
             series.Title = displayName;
             cartesianChart1.Series.Add(series);
 
@@ -74,6 +79,7 @@ namespace Charts
             if (isSeriesExist(id))
             {
                 idSeries[id].Values.Add(point);
+               
             }
 
         }
@@ -83,7 +89,16 @@ namespace Charts
             {
                 value = 0;
             }
-            return new System.DateTime(TimeSpan.FromMinutes(value).Ticks).ToString(dateTimeFormat);
+            try
+            {
+                return new System.DateTime(TimeSpan.FromMinutes(value).Ticks).ToString(dateTimeFormat);
+            }
+            catch (Exception)
+            {
+
+                return "Server error";
+            }
+            
         }
 
         public Chart()
@@ -117,14 +132,10 @@ namespace Charts
             cartesianChart1.Zoom = ZoomingOptions.X;
 
         }
-
-
-        //o object[0] =  Dictionary<string, string> command
-        //o object[1] =  isOhlc
-        //o object[2] =  interval
+        
         private void updatedGraph(object o)
         {
-
+            Console.WriteLine("Updating graph thread started");
             CommandManager cm = new CommandManager();
             object[] arry = (object[])o;
             Dictionary<string, string> command = (Dictionary<string, string>)(arry[0]);
@@ -151,27 +162,20 @@ namespace Charts
             
             while (isSeriesExist(id))//sta se desava sa grafom poruku pirkazivati na tabu i poslenji refresh
             {
-                
+                Console.WriteLine("Thread sober");
                 string json = cm.excuteCommand(command);
-                List<PointModel> points = getNewNodes(json, ref lastRefresh, isOhlc);
-                Console.WriteLine("Broj tacaka"+ points.Count() + "poslenje vreme {}");
-                foreach(PointModel p in points)
+                List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
+                Console.WriteLine("Points added:" + points.Count.ToString());
+                Console.WriteLine("lastRefresh:" + lastRefresh);
+                foreach (PointModel p in points)
                 {
                     addPointToChart(p, id);
                 }
+                Console.WriteLine("Thread sleeping for");
                 Thread.Sleep(interval * 1000);
             }
         }
 
-        private List<PointModel> getNewNodes(string json, ref string lastRefresh, bool isOhlc)
-        {
-            //OVDE TREBA ISPARSIRATI
-            lastRefresh = "2018-04-16 15:59";
-            List<PointModel> pointssss = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
-           
-            return pointssss;
-
-        }
 
         private void btOdabirGrafa_Click(object sender, EventArgs e)
         {
@@ -196,16 +200,10 @@ namespace Charts
             }
         }
 
-        private class SeriesStruct
-        {
-            public Series series;
-            public string displayName;
-            //id will hold whole link as that should be unique per instance
-            public string id;
-        }
 
         private void Chart_FormClosed(object sender, FormClosedEventArgs e)
         {
+           
             idFunctionThread.Clear();
             idSeries.Clear();
         }

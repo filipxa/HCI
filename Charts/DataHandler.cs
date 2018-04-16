@@ -86,7 +86,6 @@ namespace Charts
                         reader.Read();//Vrednost <- potrebno
                         value = double.Parse(reader.Value.ToString(), CultureInfo.InvariantCulture);
                         //Console.WriteLine(value);
-
                         
                         point = new ValuePointModel(value, dateCurent);
                         if (allPoints.Count > 200)
