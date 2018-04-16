@@ -163,7 +163,7 @@ namespace Charts
             var names = symbols.Where(item => item.ToLower().Contains(tbSym.Text.ToLower())).ToList();
             listBoxSym.DataSource = names;
             listBoxSym.EndUpdate();
-            labelSym1.ForeColor = isSymChoosen() ? Color.Black : Color.Red; // NADJI BOJU
+            labelSym1.ForeColor = isSymChoosen() ? Color.Goldenrod : Color.Red; // NADJI BOJU --DONE
 
         }
 
@@ -173,14 +173,17 @@ namespace Charts
             var names = market.Where(item => item.ToLower().Contains(tbMarket.Text.ToLower())).ToList();
             listBoxMarket.DataSource = names;
             listBoxMarket.EndUpdate();
+            labelMarket.ForeColor = isMarketChoosen() ? Color.Goldenrod : Color.Red; // Dodato da boji u crveno i kad MARKET nije dobar
+
+
         }
 
-        private void btDone_Click(object sender, EventArgs e)
+        private void btDone_Click(object sender, EventArgs e)  //PROBLEM!!! Postoje valute sa preko 4 simbola
         {
             if (!validateForms())
             {
                 this.DialogResult = DialogResult.None;
-                MessageBox.Show("Symbol and market field can only contain alphanumerical values, 1-4 characters long.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Symbol and market field can only contain alphanumerical values, 1-8 characters long. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return;
             }
 
@@ -232,7 +235,8 @@ namespace Charts
             return command;
         }
 
-        Regex regex = new Regex("^[A-Z0-9]{1,4}$");
+        Regex regex = new Regex("^[A-Z0-9]{1,8}$");
+        Regex regexMarket = new Regex("^[A-Z]{1,3}$");
         private bool validateForms()
         {
             bool allGood = true;
@@ -268,9 +272,9 @@ namespace Charts
 
         private bool isMarketChoosen()
         {
-            bool jbm = regex.IsMatch(tbMarket.Text); 
+            bool jbm = regexMarket.IsMatch(tbMarket.Text); 
 
-            return !tbMarket.Enabled || regex.IsMatch(tbMarket.Text);
+            return !tbMarket.Enabled || regexMarket.IsMatch(tbMarket.Text);
         }
 
         private bool isSymChoosen()
@@ -337,7 +341,7 @@ namespace Charts
                     if (this.listBoxSym.SelectedItem != null)
                     {
                         int j = this.listBoxSym.SelectedItem.ToString().IndexOf(',');
-                        this.tbSym.Text = this.listBoxSym.SelectedItem.ToString().Substring(0, j);
+                        this.tbSym.Text = this.listBoxSym.SelectedItem.ToString().Substring(0, j);//skinuti ovo substringovanje, nek pise sve
                         found = true;
                     }
                 }
@@ -432,14 +436,14 @@ namespace Charts
                     }
                 }
             }
-
+            
         }
 
         
 
         private void listBoxMarket_KeyDown(object sender, KeyEventArgs e)
         {
-
+        
         }
 
         private void listBoxMarket_KeyPress(object sender, KeyPressEventArgs e)
@@ -471,7 +475,7 @@ namespace Charts
                 {
                     labelMarket.ForeColor = Color.Red;
                     MessageBox.Show("Only offered values can be choosen.");
-                    labelMarket.ForeColor = Color.Black;
+                    labelMarket.ForeColor = Color.Goldenrod;
                     return;
                 }
                 
@@ -513,7 +517,7 @@ namespace Charts
                 {
                     labelMarket.ForeColor = Color.Red;
                     MessageBox.Show("Only offered values can be choosen.");
-                    labelMarket.ForeColor = Color.Black;
+                    labelMarket.ForeColor = Color.Goldenrod;
                     return;
                 }
             }
