@@ -109,10 +109,11 @@ namespace Charts
             return parameters[parameterKey];
         }
 
-        public string excuteCommand(Dictionary<string,string> parameters) 
+
+        private string getCommandAsString(Dictionary<string, string> parameters)
         {
             bool isFirst = true;
-            string url = "https://www.alphavantage.co/query?";
+            string url="";
             foreach (KeyValuePair<string, string> entry in parameters)
             {
                 if (isFirst)
@@ -122,6 +123,14 @@ namespace Charts
 
                 url += entry.Key + "=" + entry.Value;
             }
+            return url;
+        }
+
+        public string excuteCommand(Dictionary<string,string> parameters) 
+        {
+            
+            string url = "https://www.alphavantage.co/query?";
+            url+=getCommandAsString(parameters);
             url+= apiKey;
 
             string json = "";

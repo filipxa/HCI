@@ -83,9 +83,9 @@ namespace Charts
             //series.DataLabels = true;
             series.Title = displayName;
             cartesianChart1.Series.Add(series);
-            cartesianChart1.DisableAnimations = true;
-            
+            cartesianChart1.DisableAnimations = false;
 
+            
             idSeries.Add(id, series);
         }
         private bool isSeriesExist(string id)
@@ -94,6 +94,7 @@ namespace Charts
         }
         private void removeSeries(string id)
         {
+            idUpdate.Remove(id);
             idFunctionThread.Remove(id);
             idSeries.Remove(id);
         }
@@ -153,9 +154,12 @@ namespace Charts
                 LabelFormatter = value => convertTimeToY(value),
                 Title = "Vreme"
             });
-
-            //The next code simulates data changes every 500 ms
-
+            cartesianChart1.AxisY.Add(new Axis
+            {
+                LabelFormatter = val => Math.Round(val, 2).ToString() + "$",
+                MinValue = 0
+            });
+            //The next code simulates data changes every 500 
             cartesianChart1.Zoom = ZoomingOptions.X;
 
         }
@@ -191,7 +195,6 @@ namespace Charts
             {
                 Console.WriteLine("Thread sober");
                 string json = cm.excuteCommand(command);
-                lastRefresh = "2018-04-16 15:59";
                 List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
                 addPointsToUpdateQueue(points, id);
                 Console.WriteLine("Points added:" + points.Count.ToString());
@@ -250,6 +253,14 @@ namespace Charts
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btResetZoom_Click(object sender, EventArgs e)
+        {
+            cartesianChart1.AxisX[0].MinValue = double.NaN;
+            cartesianChart1.AxisX[0].MaxValue = double.NaN;
+            cartesianChart1.AxisY[0].MinValue = 0;
+            cartesianChart1.AxisY[0].MaxValue = double.NaN;
         }
     }
 }

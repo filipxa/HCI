@@ -36,6 +36,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.btResetZoom = new System.Windows.Forms.Button();
             this.groupBoxGraphControl.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
@@ -126,12 +127,23 @@
             this.dateTimePicker1.TabIndex = 5;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
+            // btResetZoom
+            // 
+            this.btResetZoom.Location = new System.Drawing.Point(711, 421);
+            this.btResetZoom.Name = "btResetZoom";
+            this.btResetZoom.Size = new System.Drawing.Size(75, 23);
+            this.btResetZoom.TabIndex = 6;
+            this.btResetZoom.Text = "button1";
+            this.btResetZoom.UseVisualStyleBackColor = true;
+            this.btResetZoom.Click += new System.EventHandler(this.btResetZoom_Click);
+            // 
             // Chart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkSlateGray;
             this.ClientSize = new System.Drawing.Size(1076, 518);
+            this.Controls.Add(this.btResetZoom);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBoxGraphControl);
@@ -157,6 +169,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Button btResetZoom;
     }
 }
 
