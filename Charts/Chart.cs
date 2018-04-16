@@ -12,7 +12,7 @@ using LiveCharts.Wpf; //The WPF controls
 using LiveCharts.WinForms;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
-using LiveCharts.Geared;
+
 using System.Threading;
 
 namespace Charts
@@ -22,7 +22,8 @@ namespace Charts
         private void Form1_Load(object sender, EventArgs e)
         {
             CommandManager.load();
-           
+            updateGraph = new Thread(updateChart);
+            updateGraph.Start();
             
         }
 
@@ -30,7 +31,28 @@ namespace Charts
 
         private static Dictionary<string, Thread> idFunctionThread = new Dictionary<string, Thread>();
         private static Dictionary<string, Series> idSeries = new Dictionary<string, Series>();
+        private static Dictionary<string, List<PointModel>> idUpdate = new Dictionary<string, List<PointModel>>();
+        private static Thread updateGraph;
+        private readonly object syncLock = new object();
+        private static bool alive = true;
+        private void updateChart()
+        {
 
+            while (alive)
+            {
+                lock (syncLock)
+                {
+                    foreach (KeyValuePair<string, List<PointModel>> pair in idUpdate)
+                    {
+                        addPointsToChart(pair.Value, pair.Key);
+                        pair.Value.Clear();
+                    }
+                   
+                }
+                Thread.Sleep(5000);
+            }
+            
+        }
         private void createNewSeries(bool isOHLC, string id, string displayName)
         {
 
@@ -42,25 +64,27 @@ namespace Charts
            
             if (isOHLC)
             {
-               
+
                 series = new OhlcSeries();
                 series.Values = new ChartValues<OHLCPointModel>();
+
             }
             else
             { 
                 series = new LineSeries();
-                
-                series.Values = new GearedValues<ValuePointModel>();
-                ((GearedValues<ValuePointModel>)series.Values).Quality = Quality.Medium;
+
+                series.Values = new ChartValues<ValuePointModel>();
 
             }
-            
+            series.PointGeometry = null;
+            series.DataLabels = false;
 
             //series.PointGeometry = null;// ovo je za preformanse ne radi ohlc sa puno tacka
             //series.DataLabels = true;
             series.Title = displayName;
             cartesianChart1.Series.Add(series);
-
+            cartesianChart1.DisableAnimations = true;
+            
 
             idSeries.Add(id, series);
         }
@@ -74,11 +98,12 @@ namespace Charts
             idSeries.Remove(id);
         }
 
-        private void addPointToChart(PointModel point, string id)
+        private void addPointsToChart(List<PointModel> points, string id)
         {
-            if (isSeriesExist(id))
+            
+             if (isSeriesExist(id))
             {
-                idSeries[id].Values.Add(point);
+                idSeries[id].Values.AddRange(points);
                
             }
 
@@ -100,6 +125,8 @@ namespace Charts
             }
             
         }
+
+        
 
         public Chart()
         {
@@ -166,17 +193,28 @@ namespace Charts
                 string json = cm.excuteCommand(command);
                 lastRefresh = "2018-04-16 15:59";
                 List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
+                addPointsToUpdateQueue(points, id);
                 Console.WriteLine("Points added:" + points.Count.ToString());
                 Console.WriteLine("lastRefresh:" + lastRefresh);
-                foreach (PointModel p in points)
-                {
-                    addPointToChart(p, id);
-                }
                 Console.WriteLine("Thread sleeping for");
                 Thread.Sleep(interval * 1000 * 60);// staviti 
             }
         }
 
+
+        private void addPointsToUpdateQueue(List<PointModel> points, string id)
+        {
+            lock (syncLock)
+            {
+                if (idUpdate.ContainsKey(id))
+                {
+                    idUpdate[id].AddRange(points);
+                } else {
+                    idUpdate.Add(id, points);
+                }
+                
+            }
+        }
 
         private void btOdabirGrafa_Click(object sender, EventArgs e)
         {
@@ -196,8 +234,7 @@ namespace Charts
                 arry[1] = isOhlc;
                 arry[2] = interval;
                 newThread.Start(arry);
-                
-                
+ 
             }
         }
 
@@ -207,6 +244,7 @@ namespace Charts
            
             idFunctionThread.Clear();
             idSeries.Clear();
+            alive = false;
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
