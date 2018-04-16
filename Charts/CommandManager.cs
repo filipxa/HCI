@@ -125,11 +125,36 @@ namespace Charts
             url+= apiKey;
 
             string json = "";
-            using (WebClient client = new WebClient())
+            using (WebClient client = new WebClient())//ogradti i poruku za tab o gresci poslenji updejt cekanje na ucatavenj
             {
-                 json = client.DownloadString(url);
+                try
+                {
+                    json = client.DownloadString(url);
+                }
+                catch (Exception)
+                {
+
+                    Console.WriteLine("url skace");
+                }
+                 
+            }
+            if (isJsonCorrect(json))
+            {
+                string message = "Data is not available at the moment.";// ovu poruku poslati nazad
             }
             return json;
+        }
+
+        private bool isJsonCorrect(string json)
+        {
+            JsonTextReader reader = new JsonTextReader(new StringReader(json));
+            reader.Read();
+            reader.Read();
+            if (0==reader.Value.ToString().CompareTo("Meta Data"))
+            {
+                return true;
+            }
+            return false;
         }
 
         public static string getId(Dictionary<string, string> parameters)

@@ -35,6 +35,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.groupBoxGraphControl.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
@@ -46,7 +47,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChart1.Location = new System.Drawing.Point(12, 12);
             this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(860, 255);
+            this.cartesianChart1.Size = new System.Drawing.Size(1052, 312);
             this.cartesianChart1.TabIndex = 0;
             this.cartesianChart1.Text = "cartesianChart1";
             // 
@@ -70,7 +71,7 @@
             this.groupBoxGraphControl.Controls.Add(this.labelLastUpdated);
             this.groupBoxGraphControl.Controls.Add(this.btOdabirGrafa);
             this.groupBoxGraphControl.ForeColor = System.Drawing.Color.Lavender;
-            this.groupBoxGraphControl.Location = new System.Drawing.Point(12, 273);
+            this.groupBoxGraphControl.Location = new System.Drawing.Point(12, 330);
             this.groupBoxGraphControl.Name = "groupBoxGraphControl";
             this.groupBoxGraphControl.Size = new System.Drawing.Size(225, 176);
             this.groupBoxGraphControl.TabIndex = 3;
@@ -91,7 +92,7 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(243, 273);
+            this.tabControl1.Location = new System.Drawing.Point(243, 330);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(418, 176);
@@ -117,20 +118,27 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(695, 352);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePicker1.TabIndex = 5;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            // 
             // Chart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.ClientSize = new System.Drawing.Size(884, 461);
+            this.ClientSize = new System.Drawing.Size(1076, 518);
+            this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBoxGraphControl);
             this.Controls.Add(this.cartesianChart1);
             this.Name = "Chart";
-
             this.Text = "Charts";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Chart_FormClosed);
-
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxGraphControl.ResumeLayout(false);
             this.groupBoxGraphControl.PerformLayout();
@@ -148,6 +156,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }
 

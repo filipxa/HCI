@@ -71,7 +71,7 @@ namespace Charts
 
             Label labelName = new Label();
             labelName.Height = 17;
-            labelName.Text = par.name;
+            labelName.Text = par.displayName;
 
             groupBox.Controls.Add(labelName);
 
@@ -360,6 +360,8 @@ namespace Charts
 
         private void tbSym_KeyDown(object sender, KeyEventArgs e)
         {
+            // TO:DO uraditi i za dugme na gore
+            // TO:DO uraditi sve ovo i za tbMarket
             if (e.KeyCode == Keys.Down)
             {
                 if (this.listBoxSym.SelectedIndex >= this.listBoxSym.Items.Count - 1)
@@ -519,6 +521,9 @@ namespace Charts
             }
         }
 
-       
+        private void labelInterval_Click(object sender, EventArgs e)
+        {
+
+        }
     }
  }

@@ -122,6 +122,7 @@ namespace Charts
             string comparingRefresh = "";
             OHLCPointModel point;
             double value;
+            string newRefresh = "";
 
             string readerAsString;
             reader.Read();
@@ -165,7 +166,7 @@ namespace Charts
 
                         if (isFirstPoint)
                         {
-                            lastRefresh = comparingRefresh;
+                            newRefresh = comparingRefresh;
                             isFirstPoint = false;
                         }
                         reader.Read();//otvorena zagrada
@@ -226,6 +227,7 @@ namespace Charts
                 }
 
             }
+            lastRefresh = newRefresh;
             return allPoints;
         }
     

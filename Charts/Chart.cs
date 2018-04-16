@@ -149,11 +149,12 @@ namespace Charts
             string lastRefresh = "";
 
             
-            while (isSeriesExist(id))
+            while (isSeriesExist(id))//sta se desava sa grafom poruku pirkazivati na tabu i poslenji refresh
             {
                 
                 string json = cm.excuteCommand(command);
                 List<PointModel> points = getNewNodes(json, ref lastRefresh, isOhlc);
+                Console.WriteLine("Broj tacaka"+ points.Count() + "poslenje vreme {}");
                 foreach(PointModel p in points)
                 {
                     addPointToChart(p, id);
@@ -165,25 +166,9 @@ namespace Charts
         private List<PointModel> getNewNodes(string json, ref string lastRefresh, bool isOhlc)
         {
             //OVDE TREBA ISPARSIRATI
+            lastRefresh = "2018-04-16 15:59";
             List<PointModel> pointssss = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
-            List<PointModel> points = new List<PointModel>();
-           Random r = new Random();
-            double k,s;
-           for (int i =0; i<1; i++)
-            {
-                if (isOhlc)
-                {
-                    k = r.NextDouble() * 100 + 30;
-                    s = k + r.Next(10) - r.Next(10);
-                    OHLCPointModel p = new OHLCPointModel(k, k+r.Next(10)+10, s-r.Next(5)-10,s, DateTime.Now.AddSeconds(-i*3));
-                    points.Add(p);
-
-                } else
-                {
-                    ValuePointModel p = new ValuePointModel(r.NextDouble() * 100 + 30, DateTime.Now.AddSeconds(-i * 3));
-                    points.Add(p);
-                }
-            }
+           
             return pointssss;
 
         }
@@ -223,6 +208,11 @@ namespace Charts
         {
             idFunctionThread.Clear();
             idSeries.Clear();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
