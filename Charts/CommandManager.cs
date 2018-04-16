@@ -132,7 +132,7 @@ namespace Charts
             string url = "https://www.alphavantage.co/query?";
             url+=getCommandAsString(parameters);
             url+= apiKey;
-
+            //string a = load("");
             string json = "";
 
             using (WebClient client = new WebClient())
@@ -144,32 +144,90 @@ namespace Charts
                 }
                 catch (Exception)
                 {
-
                     Console.WriteLine("Failed ");
                 }
               
                 Console.WriteLine("Download done");
             }
-            if (isJsonCorrect(json))
+            if (!isJsonCorrect(json))
             {
                 string message = "Data is not available at the moment.";// ovu poruku poslati nazad
+                json = load(getCommandAsString(parameters));
+                //Console.Write(json);
             }
+            else
+                save(getCommandAsString(parameters), json);
             Console.WriteLine("JSON lenght = " + json.Length);
+            
             return json;
         }
+        private void save(string name,string json)
+        {
+            if (createFolder())
+            {
+                System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts\" + name, json);
+                Console.WriteLine("Fajl je sacuvan {0}", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts\" + name);
+            }
 
+        }
+        private bool createFolder()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts";
+            Console.WriteLine("The directory was created successfully at {0}.", path);
+            try
+            {
+                // Determine whether the directory exists.
+                if (Directory.Exists(path))
+                {
+                    Console.WriteLine("That path exists already.");
+                }
+
+                // Try to create the directory.
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
+                Console.WriteLine("The directory was created successfully at {0}.", path);
+                // Delete the directory.
+                //di.Delete();
+                //Console.WriteLine("The directory was deleted successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Nece da napravi folder :(");
+                return false;
+            }
+            return true;
+
+        }
+
+        private string load(string name)
+        {
+            try
+            {
+                string[] fileEntries = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts");
+                foreach (string fileName in fileEntries)
+                {
+                   if (name.Equals(Path.GetFileName(fileName)))
+                   {
+                        return System.IO.File.ReadAllText(fileName);
+                   }
+                }
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Funkcija nije sacuvana");
+            }
+            return "";
+        }
         private bool isJsonCorrect(string json)
         {
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
             reader.Read();
             reader.Read();
-            if (json.Equals(""))
+            if (json.Length < 500)
                 return false;
-            if ( 0==reader.Value.ToString().CompareTo("Meta Data"))
-            {
-                return true;
-            }
-            return false;
+
+            return true;
         }
 
         public static string getId(Dictionary<string, string> parameters)
