@@ -36,6 +36,7 @@ namespace Charts
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
             string comparingRefresh = "";
             ValuePointModel point;
+            string newRefresh = "";
             double value;
 
             reader.Read();
@@ -78,7 +79,7 @@ namespace Charts
 
                         if (isFirstPoint)
                         {
-                            lastRefresh = comparingRefresh;
+                            newRefresh = comparingRefresh;
                             isFirstPoint = false;
                         }
                         reader.Read();//otvorena zagrada
@@ -103,6 +104,7 @@ namespace Charts
                 }
 
             }
+            lastRefresh = newRefresh;
             return allPoints;
         }
 

@@ -19,6 +19,7 @@ namespace Charts
         List<string> market = new List<string>();
         int y = 0;
         int x = 0;
+        int counterMinute = 1;
         public FunctionAddDialog()
         {
             InitializeComponent();
@@ -27,9 +28,11 @@ namespace Charts
             
             foreach (string fun in CommandManager.getAvailableFunctions())
                 this.comboBoxFun.Items.Add(fun);
-            for (int i = 0; i < 12; i++)
+            for (int i = 1; i < 14; i++)
             {
-                comboBoxInterval.Items.Add((i * 5).ToString() + "sec");
+                comboBoxInterval.Items.Add((counterMinute).ToString() + " min");
+                counterMinute = i * 5;
+                
             }
             comboBoxInterval.SelectedIndex = 1;
             comboBoxFun.SelectedIndex = 0;
@@ -205,7 +208,7 @@ namespace Charts
 
         public int getInterval()
         {
-            return Convert.ToInt32(comboBoxInterval.SelectedItem.ToString().Replace("sec", ""));
+            return Convert.ToInt32(comboBoxInterval.SelectedItem.ToString().Replace("min", ""));
         }
 
         public Dictionary<string, string> generateCommand()

@@ -164,6 +164,7 @@ namespace Charts
             {
                 Console.WriteLine("Thread sober");
                 string json = cm.excuteCommand(command);
+                lastRefresh = "2018-04-16 15:59";
                 List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
                 Console.WriteLine("Points added:" + points.Count.ToString());
                 Console.WriteLine("lastRefresh:" + lastRefresh);
@@ -172,7 +173,7 @@ namespace Charts
                     addPointToChart(p, id);
                 }
                 Console.WriteLine("Thread sleeping for");
-                Thread.Sleep(interval * 1000);
+                Thread.Sleep(interval * 1000 * 60);// staviti 
             }
         }
 

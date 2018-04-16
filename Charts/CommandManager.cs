@@ -145,6 +145,7 @@ namespace Charts
             {
                 string message = "Data is not available at the moment.";// ovu poruku poslati nazad
             }
+            Console.WriteLine("JSON lenght = " + json.Length);
             return json;
         }
 
@@ -153,7 +154,9 @@ namespace Charts
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
             reader.Read();
             reader.Read();
-            if (0==reader.Value.ToString().CompareTo("Meta Data"))
+            if (json.Equals(""))
+                return false;
+            if ( 0==reader.Value.ToString().CompareTo("Meta Data"))
             {
                 return true;
             }
