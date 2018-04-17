@@ -109,7 +109,7 @@ namespace Charts
         private static Thread updateGraph;
         private readonly object syncLock = new object();
         private static bool alive = true;
-
+        private static bool isWarrningShow = false;
         private void updateChart()
         {
 
@@ -210,7 +210,7 @@ namespace Charts
             cartesianChart1.DisableAnimations = false;
 
             
-            idSeries.Add(id, series);
+            idSeries.Add(id, series);// idSEries.Count = 1 mesdz boks radite na svoju odgovornost 
         }
         private bool isSeriesExist(string id)
         {
@@ -320,6 +320,7 @@ namespace Charts
             object[] arry = (object[])o;
             string command = ( string)(arry[0]);
             int interval = 0;
+            string message = "";
             bool isOhlc = false;
 
             if (arry[1] is bool)
@@ -343,8 +344,11 @@ namespace Charts
             while (true)//sta se desava sa grafom poruku pirkazivati na tabu i poslenji refresh
             {
                 Console.WriteLine("Thread sober");
-                string json = cm.excuteCommand(command);
+                addMessageToSeries(id, "Loading graph...");
+                string json = cm.excuteCommand(command,ref message);
+                addMessageToSeries(id, message);
                 List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
+
                 addPointsToUpdateQueue(points, id);
                 Console.WriteLine("Points added:" + points.Count.ToString());
                 Console.WriteLine("lastRefresh:" + lastRefresh);
@@ -362,7 +366,6 @@ namespace Charts
                     {
                         break;
                     }
-                    addMessageToSeries(id, "SPAVAM");
                     Thread.Sleep(5000);
                 }
                
@@ -386,6 +389,11 @@ namespace Charts
 
         private void btOdabirGrafa_Click(object sender, EventArgs e)
         {
+            if(idSeries.Count == 1 && !isWarrningShow)
+            {
+                isWarrningShow = true;
+                MessageBox.Show("Using more then one graph is in development, using it may effect program's performance", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+            }
             FunctionAddDialog d = new FunctionAddDialog();
             d.ShowDialog();
             if(d.DialogResult== DialogResult.OK)

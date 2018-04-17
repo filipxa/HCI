@@ -139,12 +139,13 @@ namespace Charts
             return url;
         }
 
-        public string excuteCommand(string command) 
+        public string excuteCommand(string command,ref string message) 
         {
             string url = "https://www.alphavantage.co/query?";
             url += command;
             url += apiKey;
             //string a = load("");
+            bool isMessageLoaded = false;
             string json = "";
 
             using (WebClient client = new WebClient())
@@ -156,7 +157,8 @@ namespace Charts
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Failed conection");
+                    isMessageLoaded = true;
+                    message = "Unable to contact server. Please check your connection.";
                 }
                 
               
@@ -164,12 +166,17 @@ namespace Charts
             }
             if (!isJsonCorrect(json))
             {
-                string message = "Data is not available at the moment.";// ovu poruku poslati nazad
-                json = load(command);
+                if (!isMessageLoaded)
+                    message = "Data is not available at the moment or doesn't exists.";// ovu poruku poslati nazad
+                json = load(command, ref message);
                 //Console.Write(json);
             }
             else
+            {
                 save(command, json);
+                message = "Successfully downloaded new data.";
+            }
+                
             Console.WriteLine("JSON lenght = " + json.Length);
             
             return json;
@@ -213,7 +220,7 @@ namespace Charts
 
         }
 
-        private string load(string name)
+        private string load(string name,ref string message)
         {
             try
             {
@@ -222,6 +229,7 @@ namespace Charts
                 {
                    if (name.Equals(Path.GetFileName(fileName)))
                    {
+                        message = "Could not download data from the server. Loaded data from local disk.";
                         return System.IO.File.ReadAllText(fileName);
                    }
                 }
@@ -229,7 +237,8 @@ namespace Charts
             }
             catch (Exception)
             {
-                Console.WriteLine("Funkcija nije sacuvana");
+                Console.WriteLine("Couldn't download data from the server. No data found on local disk.");
+                message = "Couldn't download data from the server. No data found on local disk.";
             }
             return "";
         }

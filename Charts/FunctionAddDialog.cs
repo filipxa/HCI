@@ -43,6 +43,8 @@ namespace Charts
 
         private void updateFunction(string selectedFun)
         {
+            // todo
+
             f = CommandManager.GetFunction(selectedFun);
             x = 3;
             y = 20;
@@ -112,10 +114,11 @@ namespace Charts
             ListBox lb = listBoxSym;
             TextBox tb = tbSym;
             List<string> names = symbols;
-
             if (reqPara.ToLower().Contains("crypto"))
             {
                 values = CommandManager.getCryptos();
+               
+               
 
             }
             else if (reqPara.ToLower().Contains("market"))
