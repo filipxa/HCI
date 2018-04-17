@@ -98,6 +98,18 @@ namespace Charts
            return new List<string>(functions.Keys);
         }
 
+        public static Function GetFunctionByfunctionString(string fun)
+        {
+            foreach(Function function in functions.Values)
+            {
+                if (function.function.Equals(fun))
+                {
+                    return function;
+                }
+            }
+            return null;
+        }
+
         public static Function GetFunction(string functionName)
         {
             return functions[functionName]; 

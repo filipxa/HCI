@@ -21,13 +21,82 @@ namespace Charts
 {
     public partial class Chart : Form
     {
+
+        private void deserialize(string path)
+        {
+            StreamReader sr = new StreamReader(path);
+            string line=null;
+            if((line = sr.ReadLine()) != null)
+            {
+                string[] size = line.Split(',');
+                Width = Convert.ToInt32(size[0]);
+                Height = Convert.ToInt32(size[1]);
+            }
+
+            if ((line = sr.ReadLine()) != null)
+            {
+                string[] size = line.Split(',');
+                int x = Convert.ToInt32(size[0]);
+                int y = Convert.ToInt32(size[1]);
+                Location = new Point(x, y);
+            }
+            while ((line = sr.ReadLine()) != null)
+            {
+                string id = line;
+              
+                int interval = 5;
+                string[] help = id.Split('&');
+                string displayName = "";
+                string fun = "";
+                foreach(string h in help)
+                {
+                    if (h.Contains("symbol"))
+                    {
+                        displayName = h.Split('=')[1];
+                    }
+                    if (h.Contains("function"))
+                    {
+                        fun = h.Split('=')[1];
+                    }
+                }
+                bool isOhlc = CommandManager.GetFunctionByfunctionString(fun).isOHLC;
+                createNewSeries(isOhlc, id, displayName);
+                Thread newThread = new Thread(updatedGraph);
+                object[] arry = new object[3];
+                arry[0] = id;
+                arry[1] = isOhlc;
+                arry[2] = interval;
+                newThread.Start(arry);
+            }
+            sr.Close();
+        }
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             CommandManager.load();
             updateGraph = new Thread(updateChart);
             updateGraph.Start();
             tabControl1.TabPages.Clear();
-            
+
+            createFolder();
+            string targetDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Charts", "Load");
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            bool doneone = false;
+            foreach (string fileName in fileEntries)
+            {
+                if (doneone == true)
+                {
+                    Process.Start(Path.Combine(Application.StartupPath, "Charts.exe"));
+                    break;
+                }
+                deserialize(fileName);
+                doneone = true;
+                File.Delete(fileName);
+            }
+               
+
+
+
         }
 
         private string dateTimeFormat = "yyyy-MM-dd HH:mm";
@@ -97,10 +166,6 @@ namespace Charts
             button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             button.Dock = DockStyle.Bottom;
             
-
-
-
-
 
             page.Controls.Add(button);
             button.Click += new System.EventHandler(this.btRemovGraph_Click);
@@ -343,14 +408,7 @@ namespace Charts
         }
 
 
-        private void Chart_FormClosed(object sender, FormClosedEventArgs e)
-        {
-           
-            idFunctionThread.Clear();
-            idSeries.Clear();
-            alive = false;
-            MessageBox.Show("");
-        }
+    
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
@@ -379,5 +437,71 @@ namespace Charts
                 p.CloseMainWindow();
             }
         }
+
+
+
+
+        private string serializeForm()
+        {
+            string rets = "";
+            rets += Width + "," + Height + Environment.NewLine;
+            rets += Location.X + "," + Location.Y + Environment.NewLine;
+            foreach(string key in idTabPage.Keys)
+            {
+                rets += key + Environment.NewLine;
+            }
+            return rets;
+        }
+
+
+        private void Chart_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+            idFunctionThread.Clear();
+            idSeries.Clear();
+            alive = false;
+            DialogResult result = MessageBox.Show("Do you want to save this form, so it reopens next time u run this app?", "Save", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                Guid guid = Guid.NewGuid();
+                string fileName = guid.ToString();
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Charts", "Load");
+               while(File.Exists(Path.Combine(path, "Charts", fileName)))
+                {
+                     guid = Guid.NewGuid();
+                     fileName = guid.ToString();
+                     
+                }
+                path = Path.Combine(path, fileName);
+                  
+                System.IO.File.WriteAllText(path, serializeForm());
+               
+            }
+        }
+
+        private bool createFolder()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts\Load\";
+            Console.WriteLine("The directory was created successfully at {0}.", path);
+            try
+            {
+                if (Directory.Exists(path))
+                {
+                    Console.WriteLine("That path exists already.");
+                }
+
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
+                Console.WriteLine("The directory was created successfully at {0}.", path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Nece da napravi folder :(");
+                return false;
+            }
+            return true;
+
+        }
     }
+
 }
