@@ -191,7 +191,6 @@ namespace Charts
             {
                 Console.WriteLine("Thread sober");
                 string json = cm.excuteCommand(command);
-                lastRefresh = "2018-04-16 15:59";
                 List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
                 addPointsToUpdateQueue(points, id);
                 Console.WriteLine("Points added:" + points.Count.ToString());
