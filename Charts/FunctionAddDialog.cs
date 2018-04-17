@@ -359,6 +359,7 @@ namespace Charts
 
             if (e.KeyChar == (char)Keys.Return)
             {
+                this.tbSym.SelectionStart = tbSym.Text.Length;
                 bool found = false;
                 Regex regex1 = new Regex("[ \t]");
                 if (this.tbSym.Text.Equals(regex1) || this.tbSym.Text.Equals(""))
@@ -368,34 +369,40 @@ namespace Charts
 
                         int j = this.listBoxSym.SelectedItem.ToString().IndexOf(',');
                         this.tbSym.Text = this.listBoxSym.SelectedItem.ToString().Substring(0, j);
+                        this.tbSym.SelectionStart = tbSym.Text.Length;
+                        this.tbSym.SelectionStart = tbSym.Text.Length;
                         found = true;
                     }
                 }
-                else if(this.tbSym.Text.Length < 5 && this.tbSym.Text.Length > 0)
+                else if (this.tbSym.Text.Length < 5 && this.tbSym.Text.Length > 0)
                 {
-                    if((this.listBoxSym.GetItemText(listBoxSym.SelectedItem)).Length <= 0)
+                    if ((this.listBoxSym.GetItemText(listBoxSym.SelectedItem)).Length <= 0)
                     {
                         this.tbSym.Text = this.tbSym.Text;
+                        this.tbSym.SelectionStart = tbSym.Text.Length;
                     }
                     else
                     {
                         int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
                         this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
+                        this.tbSym.SelectionStart = tbSym.Text.Length;
                     }
                     
+
                 }
                 else
                 {
                     labelSym1.ForeColor = Color.Red;
-                        MessageBox.Show("You can only enter 4 characters. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
-                        labelSym1.ForeColor = Color.Goldenrod;
-                        found = false;
-                        return;
-                    }
+                    MessageBox.Show("You can only enter 4 characters. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    labelSym1.ForeColor = Color.Goldenrod;
+                    found = false;
+                    return;
+                }
 
 
             }
-        }        
+           
+        }
 
         private void tbSym_KeyDown(object sender, KeyEventArgs e)
         {
@@ -413,14 +420,8 @@ namespace Charts
                 }
 
             }
-            this.tbSym.SelectionStart = tbSym.Text.Length;
-        }
-
-        private void tbSym_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Up)
+            else if (e.KeyCode == Keys.Up)
             {
-                this.tbSym.SelectionStart = tbSym.Text.Length;
                 if (this.listBoxSym.SelectedIndex <= 0)
                 {
                     this.listBoxSym.SelectedIndex = 0;
@@ -430,8 +431,25 @@ namespace Charts
                     this.listBoxSym.SelectedIndex--;
                 }
             }
+            this.tbSym.SelectionStart = tbSym.Text.Length;
+        }
 
-           
+        private void tbSym_KeyUp(object sender, KeyEventArgs e)
+        {
+            //if (e.KeyCode == Keys.Up)
+            //{
+            //    this.tbSym.SelectionStart = tbSym.Text.Length;
+            //    if (this.listBoxSym.SelectedIndex <= 0)
+            //    {
+            //        this.listBoxSym.SelectedIndex = 0;
+            //    }
+            //    else
+            //    {
+            //        this.listBoxSym.SelectedIndex--;
+            //    }
+            //}
+
+
 
         }
 
@@ -453,24 +471,37 @@ namespace Charts
                     this.listBoxMarket.SelectedIndex++;
                 }
             }
+            else if (e.KeyCode == Keys.Up)
+            {
+
+                if (this.listBoxMarket.SelectedIndex <= 0)
+                {
+                    this.listBoxMarket.SelectedIndex = 0;
+                }
+                else
+                {
+                    this.listBoxMarket.SelectedIndex--;
+                }
+            }
+            this.tbMarket.SelectionStart = tbMarket.Text.Length;
         }
 
         private void tbMarket_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Up)
-            {
-                this.tbMarket.SelectionStart = tbMarket.Text.Length;
-                {
-                    if (this.listBoxMarket.SelectedIndex <= 0)
-                    {
-                        this.listBoxMarket.SelectedIndex = 0;
-                    }
-                    else
-                    {
-                        this.listBoxMarket.SelectedIndex--;
-                    }
-                }
-            }
+            //if (e.KeyCode == Keys.Up)
+            //{
+            //    this.tbMarket.SelectionStart = tbMarket.Text.Length;
+            //    {
+            //        if (this.listBoxMarket.SelectedIndex <= 0)
+            //        {
+            //            this.listBoxMarket.SelectedIndex = 0;
+            //        }
+            //        else
+            //        {
+            //            this.listBoxMarket.SelectedIndex--;
+            //        }
+            //    }
+            //}
             
         }
        
@@ -482,7 +513,8 @@ namespace Charts
         private void listBoxMarket_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
-            {              
+            {
+                this.tbMarket.SelectionStart = tbMarket.Text.Length;
                 bool found = false;
                 Regex regex1 = new Regex("[ \t]");
                 if (this.tbMarket.Text.Equals(regex1) || this.tbMarket.Text.Equals(""))
@@ -491,6 +523,7 @@ namespace Charts
                     {
                         int j = this.listBoxMarket.SelectedItem.ToString().IndexOf(',');
                         this.tbMarket.Text = this.listBoxMarket.SelectedItem.ToString().Substring(0, j);
+                        this.tbMarket.SelectionStart = tbMarket.Text.Length;
                         found = true;
                     }
                 }
@@ -503,6 +536,7 @@ namespace Charts
                             found = true;
                             int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
                             this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+                            this.tbMarket.SelectionStart = tbMarket.Text.Length;
                             break;
                         }
                     }
@@ -535,8 +569,10 @@ namespace Charts
                 {
                     if (this.listBoxMarket.SelectedItem != null)
                     {
-                        int j = this.listBoxMarket.ToString().IndexOf(',');
-                        this.tbMarket.Text = this.listBoxMarket.ToString().Substring(0, j);
+                        int j = this.listBoxMarket.SelectedItem.ToString().IndexOf(',');
+                       // this.tbMarket.Text = this.listBoxMarket.SelectedItem.ToString()..Substring(0, j);
+                        this.tbMarket.Text = this.listBoxMarket.GetItemText(this.listBoxMarket.SelectedItem).Substring(0, j);
+                        this.tbMarket.SelectionStart = tbMarket.Text.Length;
                         found = true;
                     }                  
                 }
@@ -549,6 +585,7 @@ namespace Charts
                             found = true;
                             int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
                             this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+                            this.tbMarket.SelectionStart = tbMarket.Text.Length;
                             break;
                         }
                         
