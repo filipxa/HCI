@@ -16,6 +16,7 @@ using LiveCharts.Defaults;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using static Charts.CommandManager;
 
 namespace Charts
 {
@@ -59,7 +60,9 @@ namespace Charts
                         fun = h.Split('=')[1];
                     }
                 }
-                bool isOhlc = CommandManager.GetFunctionByfunctionString(fun).isOHLC;
+                Function f = CommandManager.GetFunctionByfunctionString(fun);
+                bool isOhlc = f.isOHLC;
+                displayName += " " + CommandManager.getFunctionNameByfunction(f);
                 createNewSeries(isOhlc, id, displayName);
                 Thread newThread = new Thread(updatedGraph);
                 object[] arry = new object[3];
