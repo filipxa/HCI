@@ -97,8 +97,19 @@ namespace Charts
         static public List<string> getAvailableFunctions()
         {
            return new List<string>(functions.Keys);
-        }
 
+        }
+        public static string getFunctionNameByfunction(Function fun)
+        {
+            foreach (KeyValuePair<string,Function> pair in functions) 
+            {
+                if (pair.Value.Equals(fun))
+                {
+                    return pair.Key;
+                }
+            }
+            return "";
+        }
         public static Function GetFunctionByfunctionString(string fun)
         {
             foreach(Function function in functions.Values)

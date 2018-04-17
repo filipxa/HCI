@@ -16,6 +16,7 @@ using LiveCharts.Defaults;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using static Charts.CommandManager;
 
 namespace Charts
 {
@@ -59,7 +60,9 @@ namespace Charts
                         fun = h.Split('=')[1];
                     }
                 }
-                bool isOhlc = CommandManager.GetFunctionByfunctionString(fun).isOHLC;
+                Function f = CommandManager.GetFunctionByfunctionString(fun);
+                bool isOhlc = f.isOHLC;
+                displayName += " " + CommandManager.getFunctionNameByfunction(f);
                 createNewSeries(isOhlc, id, displayName);
                 Thread newThread = new Thread(updatedGraph);
                 object[] arry = new object[3];
@@ -209,8 +212,10 @@ namespace Charts
             cartesianChart1.Series.Add(series);
             cartesianChart1.DisableAnimations = false;
 
-            
-            idSeries.Add(id, series);// idSEries.Count = 1 mesdz boks radite na svoju odgovornost 
+            lock (syncLock)
+            {
+                idSeries.Add(id, series);// idSEries.Count = 1 mesdz boks radite na svoju odgovornost 
+            }
         }
         private bool isSeriesExist(string id)
         {
@@ -218,17 +223,21 @@ namespace Charts
         }
         private void removeSeries(string id)
         {
-            idUpdate.Remove(id);
-            idFunctionThread.Remove(id);
-            cartesianChart1.Series.Remove(idSeries[id]);
-            idSeries.Remove(id);
-            tabControl1.TabPages.Remove(idTabPage[id]);
-            idTabPage.Remove(id);
-            if (idTabPage.Count == 0)
+            lock (syncLock)
             {
-                tabControl1.Visible = false;
+                idUpdate.Remove(id);
+                idFunctionThread.Remove(id);
+                cartesianChart1.Series.Remove(idSeries[id]);
+                idSeries.Remove(id);
+                tabControl1.TabPages.Remove(idTabPage[id]);
+                idTabPage.Remove(id);
+                if (idTabPage.Count == 0)
+                {
+                    tabControl1.Visible = false;
+                }
+                idTextBox.Remove(id);
             }
-            idTextBox.Remove(id);           
+                    
         }
 
         private void addPointsToChart(List<PointModel> points, string id)
@@ -392,7 +401,7 @@ namespace Charts
             if(idSeries.Count == 1 && !isWarrningShow)
             {
                 isWarrningShow = true;
-                MessageBox.Show("Using more then one graph is in development, using it may effect program's performance", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Using more then one graph is in development, using it may effect program's performance and may cause bugs.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
             }
             FunctionAddDialog d = new FunctionAddDialog();
             d.ShowDialog();
