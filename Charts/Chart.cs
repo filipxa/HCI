@@ -212,8 +212,10 @@ namespace Charts
             cartesianChart1.Series.Add(series);
             cartesianChart1.DisableAnimations = false;
 
-            
-            idSeries.Add(id, series);// idSEries.Count = 1 mesdz boks radite na svoju odgovornost 
+            lock (syncLock)
+            {
+                idSeries.Add(id, series);// idSEries.Count = 1 mesdz boks radite na svoju odgovornost 
+            }
         }
         private bool isSeriesExist(string id)
         {
@@ -221,17 +223,21 @@ namespace Charts
         }
         private void removeSeries(string id)
         {
-            idUpdate.Remove(id);
-            idFunctionThread.Remove(id);
-            cartesianChart1.Series.Remove(idSeries[id]);
-            idSeries.Remove(id);
-            tabControl1.TabPages.Remove(idTabPage[id]);
-            idTabPage.Remove(id);
-            if (idTabPage.Count == 0)
+            lock (syncLock)
             {
-                tabControl1.Visible = false;
+                idUpdate.Remove(id);
+                idFunctionThread.Remove(id);
+                cartesianChart1.Series.Remove(idSeries[id]);
+                idSeries.Remove(id);
+                tabControl1.TabPages.Remove(idTabPage[id]);
+                idTabPage.Remove(id);
+                if (idTabPage.Count == 0)
+                {
+                    tabControl1.Visible = false;
+                }
+                idTextBox.Remove(id);
             }
-            idTextBox.Remove(id);           
+                    
         }
 
         private void addPointsToChart(List<PointModel> points, string id)
