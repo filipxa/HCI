@@ -392,7 +392,7 @@ namespace Charts
             if(idSeries.Count == 1 && !isWarrningShow)
             {
                 isWarrningShow = true;
-                MessageBox.Show("Using more then one graph is in development, using it may effect program's performance", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Using more then one graph is in development, using it may effect program's performance and may cause bugs.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
             }
             FunctionAddDialog d = new FunctionAddDialog();
             d.ShowDialog();
