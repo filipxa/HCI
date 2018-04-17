@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chart));
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.btOdabirGrafa = new System.Windows.Forms.Button();
             this.groupBoxGraphControl = new System.Windows.Forms.GroupBox();
@@ -127,6 +128,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBoxGraphControl);
             this.Controls.Add(this.cartesianChart1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Chart";
             this.Text = "Charts";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Chart_FormClosed);

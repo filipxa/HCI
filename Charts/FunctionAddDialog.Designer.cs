@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FunctionAddDialog));
             this.comboBoxFun = new System.Windows.Forms.ComboBox();
             this.labelFun = new System.Windows.Forms.Label();
             this.listBoxSym = new System.Windows.Forms.ListBox();
@@ -82,7 +83,6 @@
             // 
             // tbSym
             // 
-           
             this.tbSym.BackColor = System.Drawing.Color.Lavender;
             this.tbSym.Location = new System.Drawing.Point(172, 35);
             this.tbSym.Name = "tbSym";
@@ -227,6 +227,7 @@
             this.Controls.Add(this.labelFun);
             this.Controls.Add(this.comboBoxInterval);
             this.Controls.Add(this.comboBoxFun);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FunctionAddDialog";
