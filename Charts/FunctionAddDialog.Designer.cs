@@ -82,6 +82,7 @@
             // 
             // tbSym
             // 
+           
             this.tbSym.BackColor = System.Drawing.Color.Lavender;
             this.tbSym.Location = new System.Drawing.Point(172, 35);
             this.tbSym.Name = "tbSym";
