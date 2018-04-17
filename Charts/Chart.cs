@@ -12,7 +12,10 @@ using LiveCharts.Wpf; //The WPF controls
 using LiveCharts.WinForms;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
+
 using System.Threading;
+using System.Diagnostics;
+using System.IO;
 
 namespace Charts
 {
@@ -21,7 +24,9 @@ namespace Charts
         private void Form1_Load(object sender, EventArgs e)
         {
             CommandManager.load();
-           
+            updateGraph = new Thread(updateChart);
+            updateGraph.Start();
+            tabControl1.TabPages.Clear();
             
         }
 
@@ -29,6 +34,83 @@ namespace Charts
 
         private static Dictionary<string, Thread> idFunctionThread = new Dictionary<string, Thread>();
         private static Dictionary<string, Series> idSeries = new Dictionary<string, Series>();
+        private static Dictionary<string, List<PointModel>> idUpdate = new Dictionary<string, List<PointModel>>();
+        private static Dictionary<string, TabPage> idTabPage = new Dictionary<string, TabPage>();
+        private static Dictionary<string, RichTextBox> idTextBox = new Dictionary<string, RichTextBox>();
+        private static Thread updateGraph;
+        private readonly object syncLock = new object();
+        private static bool alive = true;
+
+        private void updateChart()
+        {
+
+            while (alive)
+            {
+                lock (syncLock)
+                {
+                    foreach (KeyValuePair<string, List<PointModel>> pair in idUpdate)
+                    {
+                        addPointsToChart(pair.Value, pair.Key);
+                        pair.Value.Clear();
+                    }
+                   
+                }
+                Thread.Sleep(1000);
+            }
+            
+        }
+
+
+
+        private void btRemovGraph_Click(object sender, EventArgs e)
+        {
+            Button clickedButton = sender as Button;
+            removeSeries(clickedButton.Name);
+        }
+
+
+
+        private void createTabPage(string id, string displayName)
+        {
+            TabPage page = new TabPage();
+            idTabPage.Add(id, page);
+            page.Text = displayName;
+            page.BackColor = this.BackColor;
+
+            RichTextBox rb = new RichTextBox();
+            rb.Multiline = true;
+            rb.ScrollBars = RichTextBoxScrollBars.Vertical;
+            rb.ReadOnly = true;
+            rb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            rb.Dock = (System.Windows.Forms.DockStyle)(DockStyle.Top | DockStyle.Fill);
+
+            page.Controls.Add(rb);
+
+            idTextBox.Add(id, rb);
+
+            Button button = new Button();
+            button.BackColor = btOdabirGrafa.BackColor;
+            button.UseVisualStyleBackColor = false;
+            button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            button.Name = id;
+            button.Text = "Delete graph";
+            button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            button.Dock = DockStyle.Bottom;
+            
+
+
+
+
+
+            page.Controls.Add(button);
+            button.Click += new System.EventHandler(this.btRemovGraph_Click);
+
+           
+            tabControl1.TabPages.Add(page);
+            tabControl1.Visible = true;
+            
+            
+        }
 
         private void createNewSeries(bool isOHLC, string id, string displayName)
         {
@@ -38,25 +120,31 @@ namespace Charts
                 return;
             }
             Series series;
-           
+            createTabPage(id, displayName);
+
+
             if (isOHLC)
             {
-               
+
                 series = new OhlcSeries();
                 series.Values = new ChartValues<OHLCPointModel>();
+
             }
             else
             { 
                 series = new LineSeries();
+
                 series.Values = new ChartValues<ValuePointModel>();
+
             }
-            
-          //  series.PointGeometry = null;// ovo je za preformanse ne radi ohlc sa puno tacka
-            series.DataLabels = true;
+            series.PointGeometry = null;
+            series.DataLabels = false;
+
             series.Title = displayName;
             cartesianChart1.Series.Add(series);
+            cartesianChart1.DisableAnimations = false;
 
-
+            
             idSeries.Add(id, series);
         }
         private bool isSeriesExist(string id)
@@ -65,16 +153,43 @@ namespace Charts
         }
         private void removeSeries(string id)
         {
+            idUpdate.Remove(id);
             idFunctionThread.Remove(id);
+            cartesianChart1.Series.Remove(idSeries[id]);
             idSeries.Remove(id);
+            tabControl1.TabPages.Remove(idTabPage[id]);
+            idTabPage.Remove(id);
+            if (idTabPage.Count == 0)
+            {
+                tabControl1.Visible = false;
+            }
+            idTextBox.Remove(id);           
         }
 
-        private void addPointToChart(PointModel point, string id)
+        private void addPointsToChart(List<PointModel> points, string id)
         {
-            if (isSeriesExist(id))
+            
+             if (isSeriesExist(id))
             {
-                idSeries[id].Values.Add(point);
+                idSeries[id].Values.AddRange(points);
+               
             }
+
+        }
+
+        private void addMessageToSeries(string id, string message)
+        {
+
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string, string>(addMessageToSeries), new object[] { id, message });
+                return;
+            }
+            RichTextBox tb = idTextBox[id];
+            tb.Text += "\n[" + DateTime.Now.ToString("HH:mm:ss") + "]::  " + message;
+            tb.SelectionStart = tb.Text.Length - 1;
+            tb.SelectionLength = 0;
+            tb.ScrollToCaret();
 
         }
         private string convertTimeToY(double value)
@@ -83,8 +198,19 @@ namespace Charts
             {
                 value = 0;
             }
-            return new System.DateTime(TimeSpan.FromMinutes(value).Ticks).ToString(dateTimeFormat);
+            try
+            {
+                return new System.DateTime(TimeSpan.FromMinutes(value).Ticks).ToString(dateTimeFormat);
+            }
+            catch (Exception)
+            {
+
+                return "Server error";
+            }
+            
         }
+
+        
 
         public Chart()
         {
@@ -109,25 +235,25 @@ namespace Charts
             {
                 DisableAnimations = false,
                 LabelFormatter = value => convertTimeToY(value),
-                Title = "Vreme"
+                Title = "Vreme",
+                MinRange = 5
             });
-
-            //The next code simulates data changes every 500 ms
-
+            cartesianChart1.AxisY.Add(new Axis
+            {
+                LabelFormatter = val => Math.Round(val, 2).ToString() + "$"
+               
+            });
+            //The next code simulates data changes every 500 
             cartesianChart1.Zoom = ZoomingOptions.X;
 
         }
-
-
-        //o object[0] =  Dictionary<string, string> command
-        //o object[1] =  isOhlc
-        //o object[2] =  interval
+        
         private void updatedGraph(object o)
         {
-
+            Console.WriteLine("Updating graph thread started");
             CommandManager cm = new CommandManager();
             object[] arry = (object[])o;
-            Dictionary<string, string> command = (Dictionary<string, string>)(arry[0]);
+            string command = ( string)(arry[0]);
             int interval = 0;
             bool isOhlc = false;
 
@@ -144,48 +270,53 @@ namespace Charts
             }
 
 
-            string id = CommandManager.getId(command);
+            string id = command;
            
             string lastRefresh = "";
 
-            
-            while (isSeriesExist(id))
+            DateTime time;
+            while (true)//sta se desava sa grafom poruku pirkazivati na tabu i poslenji refresh
             {
-                
+                Console.WriteLine("Thread sober");
                 string json = cm.excuteCommand(command);
-                List<PointModel> points = getNewNodes(json, ref lastRefresh, isOhlc);
-                foreach(PointModel p in points)
+                List<PointModel> points = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
+                addPointsToUpdateQueue(points, id);
+                Console.WriteLine("Points added:" + points.Count.ToString());
+                Console.WriteLine("lastRefresh:" + lastRefresh);
+                Console.WriteLine("Thread sleeping for");
+                time = DateTime.Now;
+                
+                while (true)
                 {
-                    addPointToChart(p, id);
+                    if (!isSeriesExist(id))
+                        return;
+                    TimeSpan span = DateTime.Now - time;
+                    double totalMinutes = span.TotalMinutes;
+                    time = DateTime.Now;
+                    if (totalMinutes >= interval)
+                    {
+                        break;
+                    }
+                    addMessageToSeries(id, "SPAVAM");
+                    Thread.Sleep(5000);
                 }
-                Thread.Sleep(interval * 1000);
+               
             }
         }
 
-        private List<PointModel> getNewNodes(string json, ref string lastRefresh, bool isOhlc)
+
+        private void addPointsToUpdateQueue(List<PointModel> points, string id)
         {
-            //OVDE TREBA ISPARSIRATI
-            List<PointModel> pointssss = DataHandler.JSONtoPoint(json, ref lastRefresh, isOhlc);
-            List<PointModel> points = new List<PointModel>();
-           Random r = new Random();
-            double k,s;
-           for (int i =0; i<1; i++)
+            lock (syncLock)
             {
-                if (isOhlc)
+                if (idUpdate.ContainsKey(id))
                 {
-                    k = r.NextDouble() * 100 + 30;
-                    s = k + r.Next(10) - r.Next(10);
-                    OHLCPointModel p = new OHLCPointModel(k, k+r.Next(10)+10, s-r.Next(5)-10,s, DateTime.Now.AddSeconds(-i*3));
-                    points.Add(p);
-
-                } else
-                {
-                    ValuePointModel p = new ValuePointModel(r.NextDouble() * 100 + 30, DateTime.Now.AddSeconds(-i * 3));
-                    points.Add(p);
+                    idUpdate[id].AddRange(points);
+                } else {
+                    idUpdate.Add(id, points);
                 }
+                
             }
-            return pointssss;
-
         }
 
         private void btOdabirGrafa_Click(object sender, EventArgs e)
@@ -202,27 +333,51 @@ namespace Charts
                 createNewSeries(isOhlc, id, d.getSeriesDisplayName());
                 Thread newThread = new Thread(updatedGraph);
                 object[] arry = new object[3];
-                arry[0] = command;
+                arry[0] = id;
                 arry[1] = isOhlc;
                 arry[2] = interval;
                 newThread.Start(arry);
-                
-                
+ 
             }
+            d.Dispose();
         }
 
-        private class SeriesStruct
-        {
-            public Series series;
-            public string displayName;
-            //id will hold whole link as that should be unique per instance
-            public string id;
-        }
 
         private void Chart_FormClosed(object sender, FormClosedEventArgs e)
         {
+           
             idFunctionThread.Clear();
             idSeries.Clear();
+            alive = false;
+            MessageBox.Show("");
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btResetZoom_Click(object sender, EventArgs e)
+        {
+            cartesianChart1.AxisX[0].MinValue = double.NaN;
+            cartesianChart1.AxisX[0].MaxValue = double.NaN;
+            cartesianChart1.AxisY[0].MinValue = double.NaN;
+            cartesianChart1.AxisY[0].MaxValue = double.NaN;
+        }
+      
+        private void btNewInstance_Click(object sender, EventArgs e)
+        {
+            Process.Start(Path.Combine(Application.StartupPath, "Charts.exe"));
+        }
+
+        private void btCloseAll_Click(object sender, EventArgs e)
+        {
+ 
+            Process[] processes = Process.GetProcessesByName("Charts");
+            foreach(Process p in processes)
+            {
+                p.CloseMainWindow();
+            }
         }
     }
 }

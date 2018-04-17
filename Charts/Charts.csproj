@@ -94,12 +94,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="crypto.csv" />
-    <None Include="equitysymbol.csv" />
-    <None Include="funkcije.json" />
     <None Include="packages.config" />
-    <None Include="parameters.json" />
-    <None Include="physical_currency_list.csv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

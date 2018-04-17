@@ -346,3 +346,5 @@ ASALocalRun/
 .mfractor/
 
 Charts/bin/Debug/
+
+*.Cache

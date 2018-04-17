@@ -19,6 +19,7 @@ namespace Charts
         List<string> market = new List<string>();
         int y = 0;
         int x = 0;
+        int counterMinute = 1;
         public FunctionAddDialog()
         {
             InitializeComponent();
@@ -27,9 +28,11 @@ namespace Charts
             
             foreach (string fun in CommandManager.getAvailableFunctions())
                 this.comboBoxFun.Items.Add(fun);
-            for (int i = 0; i < 12; i++)
+            for (int i = 1; i < 14; i++)
             {
-                comboBoxInterval.Items.Add((i * 5).ToString() + "sec");
+                comboBoxInterval.Items.Add((counterMinute).ToString() + " min");
+                counterMinute = i * 5;
+                
             }
             comboBoxInterval.SelectedIndex = 1;
             comboBoxFun.SelectedIndex = 0;
@@ -71,7 +74,7 @@ namespace Charts
 
             Label labelName = new Label();
             labelName.Height = 17;
-            labelName.Text = par.name;
+            labelName.Text = par.displayName;
 
             groupBox.Controls.Add(labelName);
 
@@ -159,12 +162,11 @@ namespace Charts
             if ((string)comboBoxFun.SelectedItem != null)
             {
                 updateFunction((string)comboBoxFun.SelectedItem);
-                this.listBoxSym.DataSource = null;
-                this.tbSym.Text = "";
-                addSymbolTable(comboBoxFun.SelectedItem.ToString());
-                
+                listBoxMarket.BeginUpdate();
+                var names = market.Where(item => item.ToLower().Contains(tbMarket.Text.ToLower())).ToList();
+                listBoxMarket.DataSource = names;
+                listBoxMarket.EndUpdate();
             }
-            
         }
 
         private void tbSym_TextChanged(object sender, EventArgs e)
@@ -177,7 +179,7 @@ namespace Charts
 
         }
 
-        private void tbMarket_TextChanged(object sender, EventArgs e)
+        private void tbMarket_TextChanged(object sender, EventArgs e)//
         {
             listBoxMarket.BeginUpdate();
             var names = market.Where(item => item.ToLower().Contains(tbMarket.Text.ToLower())).ToList();
@@ -215,7 +217,7 @@ namespace Charts
 
         public int getInterval()
         {
-            return Convert.ToInt32(comboBoxInterval.SelectedItem.ToString().Replace("sec", ""));
+            return Convert.ToInt32(comboBoxInterval.SelectedItem.ToString().Replace("min", ""));
         }
 
         public Dictionary<string, string> generateCommand()
@@ -397,6 +399,8 @@ namespace Charts
 
         private void tbSym_KeyDown(object sender, KeyEventArgs e)
         {
+            // TO:DO uraditi i za dugme na gore
+            // TO:DO uraditi sve ovo i za tbMarket
             if (e.KeyCode == Keys.Down)
             {
                 if (this.listBoxSym.SelectedIndex >= this.listBoxSym.Items.Count - 1)
@@ -561,7 +565,10 @@ namespace Charts
             }
         }
 
-       
+        private void labelInterval_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

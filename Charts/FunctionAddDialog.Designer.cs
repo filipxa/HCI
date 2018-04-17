@@ -202,9 +202,10 @@
             this.labelInterval.ForeColor = System.Drawing.Color.White;
             this.labelInterval.Location = new System.Drawing.Point(7, 432);
             this.labelInterval.Name = "labelInterval";
-            this.labelInterval.Size = new System.Drawing.Size(42, 13);
+            this.labelInterval.Size = new System.Drawing.Size(82, 13);
             this.labelInterval.TabIndex = 2;
-            this.labelInterval.Text = "Interval";
+            this.labelInterval.Text = "Refresh Interval";
+            this.labelInterval.Click += new System.EventHandler(this.labelInterval_Click);
             // 
             // FunctionAddDialog
             // 

@@ -36,6 +36,7 @@ namespace Charts
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
             string comparingRefresh = "";
             ValuePointModel point;
+            string newRefresh = "";
             double value;
 
             reader.Read();
@@ -78,7 +79,7 @@ namespace Charts
 
                         if (isFirstPoint)
                         {
-                            lastRefresh = comparingRefresh;
+                            newRefresh = comparingRefresh;
                             isFirstPoint = false;
                         }
                         reader.Read();//otvorena zagrada
@@ -86,7 +87,6 @@ namespace Charts
                         reader.Read();//Vrednost <- potrebno
                         value = double.Parse(reader.Value.ToString(), CultureInfo.InvariantCulture);
                         //Console.WriteLine(value);
-
                         
                         point = new ValuePointModel(value, dateCurent);
                         if (allPoints.Count > 200)
@@ -104,6 +104,7 @@ namespace Charts
                 }
 
             }
+            lastRefresh = newRefresh;
             return allPoints;
         }
 
@@ -122,6 +123,7 @@ namespace Charts
             string comparingRefresh = "";
             OHLCPointModel point;
             double value;
+            string newRefresh = "";
 
             string readerAsString;
             reader.Read();
@@ -165,7 +167,7 @@ namespace Charts
 
                         if (isFirstPoint)
                         {
-                            lastRefresh = comparingRefresh;
+                            newRefresh = comparingRefresh;
                             isFirstPoint = false;
                         }
                         reader.Read();//otvorena zagrada
@@ -226,6 +228,7 @@ namespace Charts
                 }
 
             }
+            lastRefresh = newRefresh;
             return allPoints;
         }
     
