@@ -198,7 +198,7 @@ namespace Charts
             if (!validateForms())
             {
                 this.DialogResult = DialogResult.None;
-                MessageBox.Show("Symbol and market field can only contain alphanumerical values, 1-8 characters long. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Symbol and market field can only contain alphanumerical values, 1-8 characters long. Please choose the correct one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                 return;
             }
 
@@ -250,7 +250,7 @@ namespace Charts
             return command;
         }
 
-        Regex regex = new Regex("^[A-Z0-9]{1,4}$");
+        Regex regex = new Regex("^[A-Z0-9]{1,5}$");
         Regex regexMarket = new Regex("^[A-Z]{1,4}$");
         private bool validateForms()
         {
@@ -343,17 +343,7 @@ namespace Charts
                         this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
                     }
                 }
-                /*
-                foreach (string name in this.listBoxSym.Items)
-                {
-                    if (this.tbSym.Text.Equals(name.Substring(0, this.tbSym.Text.Length)))
-                    {
-                        found = true;
-                        int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
-                        this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
-                        break;
-                    }
-                }          */      
+    
             }
         }
 
@@ -377,7 +367,7 @@ namespace Charts
                         found = true;
                     }
                 }
-                else if (this.tbSym.Text.Length < 5 && this.tbSym.Text.Length > 0)
+                else if (this.tbSym.Text.Length < 9 && this.tbSym.Text.Length > 0)
                 {
                     if ((this.listBoxSym.GetItemText(listBoxSym.SelectedItem)).Length <= 0)
                     {
@@ -396,7 +386,7 @@ namespace Charts
                 else
                 {
                     labelSym1.ForeColor = Color.Red;
-                    MessageBox.Show("You can only enter 4 characters. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show("Stocks have their short-names. Please check it.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     labelSym1.ForeColor = Color.Goldenrod;
                     found = false;
                     return;
@@ -547,7 +537,7 @@ namespace Charts
                 if (!found)
                 {
                     labelMarket.ForeColor = Color.Red;
-                    MessageBox.Show("You can choose only offered values from the list. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show("You can choose only offered values from the list. Please choose the correct one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     labelMarket.ForeColor = Color.Goldenrod;
                     return;
                 }
@@ -597,7 +587,7 @@ namespace Charts
                 if(!found)
                 {
                     labelMarket.ForeColor = Color.Red;
-                    MessageBox.Show("You can choose only offered values from the list. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show("You can choose only offered values from the list. Please choose the correct one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     labelMarket.ForeColor = Color.Goldenrod;
                     found = false;
                     return;
