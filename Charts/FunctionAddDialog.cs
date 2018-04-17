@@ -130,7 +130,10 @@ namespace Charts
             else
             {
                 tbMarket.Enabled = false;
+                
                 listBoxMarket.Enabled = false;
+                listBoxMarket.DataSource = null;
+
                 values = CommandManager.getEquity();
             }
             names.Clear();
@@ -197,12 +200,12 @@ namespace Charts
             }
 
         }
+
         public bool isSeriesOhlc()
         {
 
             return f.isOHLC;
         }
-
 
         public string getSeriesDisplayName()
         {
@@ -244,8 +247,8 @@ namespace Charts
             return command;
         }
 
-        Regex regex = new Regex("^[A-Z0-9]{1,8}$");
-        Regex regexMarket = new Regex("^[A-Z]{1,3}$");
+        Regex regex = new Regex("^[A-Z0-9]{1,4}$");
+        Regex regexMarket = new Regex("^[A-Z]{1,4}$");
         private bool validateForms()
         {
             bool allGood = true;
@@ -317,28 +320,6 @@ namespace Charts
             this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
         }
 
-        private void tbSym_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            if (e.KeyChar == (char)Keys.Return)
-            {
-                Regex regex1 = new Regex("[ \t]");
-                if (this.tbSym.Text.Equals(regex1) || this.tbSym.Text.Equals(""))
-                {
-                    if (this.listBoxSym.SelectedItem != null)
-                    {
-                        string text = listBoxSym.SelectedItem.ToString();
-
-                        this.tbSym.Text = text.Substring(0, text.IndexOf(','));
-                    }
-                }
-               
-
-
-
-
-            }
-        }
         private void listBoxSym_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
@@ -353,23 +334,68 @@ namespace Charts
                         this.tbSym.Text = this.listBoxSym.SelectedItem.ToString().Substring(0, j);//skinuti ovo substringovanje, nek pise sve
                         found = true;
                     }
+                    else
+                    {
+                        int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
+                        this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
+                    }
                 }
+                /*
                 foreach (string name in this.listBoxSym.Items)
                 {
-                    if (this.tbSym.Text.Equals(name.Substring(0, name.IndexOf(','))))
+                    if (this.tbSym.Text.Equals(name.Substring(0, this.tbSym.Text.Length)))
                     {
                         found = true;
                         int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
                         this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
                         break;
                     }
+                }          */      
+            }
+        }
+
+        private void tbSym_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                bool found = false;
+                Regex regex1 = new Regex("[ \t]");
+                if (this.tbSym.Text.Equals(regex1) || this.tbSym.Text.Equals(""))
+                {
+                    if (this.listBoxSym.SelectedItem != null)
+                    {
+
+                        int j = this.listBoxSym.SelectedItem.ToString().IndexOf(',');
+                        this.tbSym.Text = this.listBoxSym.SelectedItem.ToString().Substring(0, j);
+                        found = true;
+                    }
                 }
-
-
+                else if(this.tbSym.Text.Length < 5 && this.tbSym.Text.Length > 0)
+                {
+                    if((this.listBoxSym.GetItemText(listBoxSym.SelectedItem)).Length <= 0)
+                    {
+                        this.tbSym.Text = this.tbSym.Text;
+                    }
+                    else
+                    {
+                        int i = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).IndexOf(',');
+                        this.tbSym.Text = this.listBoxSym.GetItemText(listBoxSym.SelectedItem).Substring(0, i);
+                    }
+                    
+                }
+                else
+                {
+                    labelSym1.ForeColor = Color.Red;
+                        MessageBox.Show("You can only enter 4 characters. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                        labelSym1.ForeColor = Color.Goldenrod;
+                        found = false;
+                        return;
+                    }
 
 
             }
-        }
+        }        
 
         private void tbSym_KeyDown(object sender, KeyEventArgs e)
         {
@@ -417,9 +443,7 @@ namespace Charts
         {
             if (e.KeyCode == Keys.Down)
             {
-                this.tbMarket.SelectionStart = tbMarket.Text.Length;
-
-
+                
                 if (this.listBoxMarket.SelectedIndex >= this.listBoxMarket.Items.Count - 1)
                 {
                     this.listBoxMarket.SelectedIndex = this.listBoxMarket.Items.Count - 1;
@@ -449,18 +473,16 @@ namespace Charts
             }
             
         }
-
-        
-
+       
         private void listBoxMarket_KeyDown(object sender, KeyEventArgs e)
         {
-        
+            this.tbMarket.SelectionStart = tbMarket.Text.Length;
         }
 
         private void listBoxMarket_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
-            {
+            {              
                 bool found = false;
                 Regex regex1 = new Regex("[ \t]");
                 if (this.tbMarket.Text.Equals(regex1) || this.tbMarket.Text.Equals(""))
@@ -472,24 +494,27 @@ namespace Charts
                         found = true;
                     }
                 }
-                foreach (string name in this.listBoxMarket.Items)
+                else if (this.tbMarket.Text.Length < 5)
                 {
-                    if (this.tbMarket.Text.Equals(name.Substring(0, name.IndexOf(','))))
+                    foreach (string name in this.listBoxMarket.Items)
                     {
-                        found = true;
-                        int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
-                        this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
-                        break;
+                        if (name.ToLower().Contains(this.tbMarket.Text.ToLower()))
+                        {
+                            found = true;
+                            int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
+                            this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+                            break;
+                        }
                     }
                 }
                 if (!found)
                 {
                     labelMarket.ForeColor = Color.Red;
-                    MessageBox.Show("Only offered values can be choosen.");
+                    MessageBox.Show("You can choose only offered values from the list. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     labelMarket.ForeColor = Color.Goldenrod;
                     return;
                 }
-                
+                            
             }
         }
 
@@ -500,7 +525,7 @@ namespace Charts
         }
 
         private void tbMarket_KeyPress(object sender, KeyPressEventArgs e)
-        {
+       {
 
             if (e.KeyChar == (char)Keys.Return)
             {
@@ -510,25 +535,31 @@ namespace Charts
                 {
                     if (this.listBoxMarket.SelectedItem != null)
                     {
-                        this.tbMarket.Text = this.listBoxMarket.SelectedItem.ToString();
+                        int j = this.listBoxMarket.ToString().IndexOf(',');
+                        this.tbMarket.Text = this.listBoxMarket.ToString().Substring(0, j);
                         found = true;
-                    }
+                    }                  
                 }
-                foreach (string name in this.listBoxMarket.Items)
+                else if(this.tbMarket.Text.Length < 5)
                 {
-                    if (this.tbMarket.Text.Equals(name.Substring(0, name.IndexOf(','))))
+                    foreach (string name in this.listBoxMarket.Items)
                     {
-                        found = true;
-                        int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
-                        this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
-                        break;
-                    }
+                        if (name.ToLower().Contains(this.tbMarket.Text.ToLower()))
+                        {
+                            found = true;
+                            int i = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).IndexOf(',');
+                            this.tbMarket.Text = this.listBoxMarket.GetItemText(listBoxMarket.SelectedItem).Substring(0, i);
+                            break;
+                        }
+                        
+                    }                                          
                 }
-                if (!found)
+                if(!found)
                 {
                     labelMarket.ForeColor = Color.Red;
-                    MessageBox.Show("Only offered values can be choosen.");
+                    MessageBox.Show("You can choose only offered values from the list. Please choose the correct one.", "Warrning", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     labelMarket.ForeColor = Color.Goldenrod;
+                    found = false;
                     return;
                 }
             }
@@ -539,4 +570,7 @@ namespace Charts
 
         }
     }
- }
+}
+
+
+
