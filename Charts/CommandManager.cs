@@ -132,7 +132,7 @@ namespace Charts
             string url = "https://www.alphavantage.co/query?";
             url+=getCommandAsString(parameters);
             url+= apiKey;
-
+            //string a = load("");
             string json = "";
 
             using (WebClient client = new WebClient())
@@ -144,7 +144,6 @@ namespace Charts
                 }
                 catch (Exception)
                 {
-
                     Console.WriteLine("Failed ");
                 }
               
@@ -153,9 +152,11 @@ namespace Charts
             if (!isJsonCorrect(json))
             {
                 string message = "Data is not available at the moment.";// ovu poruku poslati nazad
+                json = load(getCommandAsString(parameters));
+                //Console.Write(json);
             }
             else
-                save(getCommandAsString(parameters)+".json", json);
+                save(getCommandAsString(parameters), json);
             Console.WriteLine("JSON lenght = " + json.Length);
             
             return json;
@@ -196,6 +197,27 @@ namespace Charts
             }
             return true;
 
+        }
+
+        private string load(string name)
+        {
+            try
+            {
+                string[] fileEntries = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts");
+                foreach (string fileName in fileEntries)
+                {
+                   if (name.Equals(Path.GetFileName(fileName)))
+                   {
+                        return System.IO.File.ReadAllText(fileName);
+                   }
+                }
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Funkcija nije sacuvana");
+            }
+            return "";
         }
         private bool isJsonCorrect(string json)
         {
