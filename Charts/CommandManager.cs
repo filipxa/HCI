@@ -150,26 +150,62 @@ namespace Charts
               
                 Console.WriteLine("Download done");
             }
-            if (isJsonCorrect(json))
+            if (!isJsonCorrect(json))
             {
                 string message = "Data is not available at the moment.";// ovu poruku poslati nazad
             }
+            else
+                save(getCommandAsString(parameters)+".json", json);
             Console.WriteLine("JSON lenght = " + json.Length);
+            
             return json;
         }
+        private void save(string name,string json)
+        {
+            if (createFolder())
+            {
+                System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts\" + name, json);
+                Console.WriteLine("Fajl je sacuvan {0}", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts\" + name);
+            }
 
+        }
+        private bool createFolder()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts";
+            Console.WriteLine("The directory was created successfully at {0}.", path);
+            try
+            {
+                // Determine whether the directory exists.
+                if (Directory.Exists(path))
+                {
+                    Console.WriteLine("That path exists already.");
+                }
+
+                // Try to create the directory.
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
+                Console.WriteLine("The directory was created successfully at {0}.", path);
+                // Delete the directory.
+                //di.Delete();
+                //Console.WriteLine("The directory was deleted successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Nece da napravi folder :(");
+                return false;
+            }
+            return true;
+
+        }
         private bool isJsonCorrect(string json)
         {
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
             reader.Read();
             reader.Read();
-            if (json.Equals(""))
+            if (json.Length < 500)
                 return false;
-            if ( 0==reader.Value.ToString().CompareTo("Meta Data"))
-            {
-                return true;
-            }
-            return false;
+
+            return true;
         }
 
         public static string getId(Dictionary<string, string> parameters)

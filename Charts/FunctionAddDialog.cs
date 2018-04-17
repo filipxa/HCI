@@ -157,7 +157,13 @@ namespace Charts
         private void comboBoxFun_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((string)comboBoxFun.SelectedItem != null)
+            {
                 updateFunction((string)comboBoxFun.SelectedItem);
+                listBoxMarket.BeginUpdate();
+                var names = market.Where(item => item.ToLower().Contains(tbMarket.Text.ToLower())).ToList();
+                listBoxMarket.DataSource = names;
+                listBoxMarket.EndUpdate();
+            }
         }
 
         private void tbSym_TextChanged(object sender, EventArgs e)
@@ -170,7 +176,7 @@ namespace Charts
 
         }
 
-        private void tbMarket_TextChanged(object sender, EventArgs e)
+        private void tbMarket_TextChanged(object sender, EventArgs e)//
         {
             listBoxMarket.BeginUpdate();
             var names = market.Where(item => item.ToLower().Contains(tbMarket.Text.ToLower())).ToList();
