@@ -253,7 +253,7 @@ namespace Charts
             Console.WriteLine("Updating graph thread started");
             CommandManager cm = new CommandManager();
             object[] arry = (object[])o;
-            Dictionary<string, string> command = (Dictionary<string, string>)(arry[0]);
+            string command = ( string)(arry[0]);
             int interval = 0;
             bool isOhlc = false;
 
@@ -270,7 +270,7 @@ namespace Charts
             }
 
 
-            string id = CommandManager.getId(command);
+            string id = command;
            
             string lastRefresh = "";
 
@@ -333,7 +333,7 @@ namespace Charts
                 createNewSeries(isOhlc, id, d.getSeriesDisplayName());
                 Thread newThread = new Thread(updatedGraph);
                 object[] arry = new object[3];
-                arry[0] = command;
+                arry[0] = id;
                 arry[1] = isOhlc;
                 arry[2] = interval;
                 newThread.Start(arry);
@@ -368,7 +368,6 @@ namespace Charts
         private void btNewInstance_Click(object sender, EventArgs e)
         {
             Process.Start(Path.Combine(Application.StartupPath, "Charts.exe"));
-            
         }
 
         private void btCloseAll_Click(object sender, EventArgs e)

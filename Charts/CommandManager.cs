@@ -110,7 +110,7 @@ namespace Charts
         }
 
 
-        private string getCommandAsString(Dictionary<string, string> parameters)
+        static private string getCommandAsString(Dictionary<string, string> parameters)
         {
             bool isFirst = true;
             string url="";
@@ -126,12 +126,12 @@ namespace Charts
             return url;
         }
 
-        public string excuteCommand(Dictionary<string,string> parameters) 
+        public string excuteCommand(string command) 
         {
             
             string url = "https://www.alphavantage.co/query?";
-            url+=getCommandAsString(parameters);
-            url+= apiKey;
+            url += command;
+            url += apiKey;
             //string a = load("");
             string json = "";
 
@@ -152,11 +152,11 @@ namespace Charts
             if (!isJsonCorrect(json))
             {
                 string message = "Data is not available at the moment.";// ovu poruku poslati nazad
-                json = load(getCommandAsString(parameters));
+                json = load(command);
                 //Console.Write(json);
             }
             else
-                save(getCommandAsString(parameters), json);
+                save(command, json);
             Console.WriteLine("JSON lenght = " + json.Length);
             
             return json;
@@ -232,14 +232,11 @@ namespace Charts
 
         public static string getId(Dictionary<string, string> parameters)
         {
-            string url = "";
-            foreach (KeyValuePair<string, string> entry in parameters)
-            {
-                url += "&" + entry.Key + "=" + entry.Value;
-            }
-            return url;
+
+            return getCommandAsString(parameters);
 
         }
+
 
 
 
