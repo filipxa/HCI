@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using System.Net.NetworkInformation;
 
 namespace Charts
 {
@@ -128,7 +129,6 @@ namespace Charts
 
         public string excuteCommand(Dictionary<string,string> parameters) 
         {
-            
             string url = "https://www.alphavantage.co/query?";
             url+=getCommandAsString(parameters);
             url+= apiKey;
@@ -144,8 +144,9 @@ namespace Charts
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Failed ");
+                    Console.WriteLine("Failed conection");
                 }
+                
               
                 Console.WriteLine("Download done");
             }
@@ -170,6 +171,7 @@ namespace Charts
             }
 
         }
+
         private bool createFolder()
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Charts";
